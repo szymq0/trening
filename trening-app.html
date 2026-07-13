@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1b1d20">
+<title>Trening — plan domowy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1b1d20; --paper:#fbfaf7; --muted:#6b6f76; --line:#e4e2dc; --card:#ffffff;
+    --push:#d64541; --push-soft:#fbeceb;
+    --pull:#2a6f97; --pull-soft:#eaf1f6;
+    --legs:#2d6a4f; --legs-soft:#eaf2ee;
+    --core:#b06a10; --core-soft:#f7efe2;
+    --safe-b: env(safe-area-inset-bottom, 0px);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:'Barlow',system-ui,sans-serif; font-size:15px; line-height:1.45;
+    overscroll-behavior-y:contain;
+  }
+  #app{max-width:640px;margin:0 auto;padding:14px 14px calc(86px + var(--safe-b))}
+
+  /* type */
+  .disp{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.01em}
+  .kicker{font-family:'Barlow Condensed',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.13em;font-size:12px;color:var(--muted)}
+  h1{font-size:34px;line-height:1.02}
+  h2{font-size:24px;line-height:1.05}
+
+  /* cards */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+  .daycard{display:flex;align-items:center;gap:14px;cursor:pointer}
+  .daymark{width:54px;height:54px;border-radius:12px;color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:34px;flex:none}
+  .daycard .meta{flex:1;min-width:0}
+  .daycard .t{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:21px;text-transform:uppercase;line-height:1.05}
+  .daycard .s{font-size:13px;color:var(--muted)}
+  .chev{color:var(--muted);font-size:22px}
+
+  /* buttons */
+  button{font:inherit;border:none;background:none;cursor:pointer;color:inherit}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    border:1.5px solid var(--ink);border-radius:10px;padding:10px 16px;
+    font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:16px;
+    text-transform:uppercase;letter-spacing:.06em;background:#fff;
+  }
+  .btn.primary{background:var(--ink);color:#fff}
+  .btn.small{padding:6px 11px;font-size:14px;border-width:1px}
+  .btn.ghost{border-color:var(--line);color:var(--muted)}
+  .btn:active{transform:translateY(1px)}
+  .btnrow{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+
+  /* exercise row */
+  .ex{padding:0;overflow:hidden}
+  .exhead{display:flex;gap:12px;padding:12px 14px;align-items:flex-start}
+  .fig{width:120px;flex:none;border-radius:10px;padding:4px}
+  .fig svg{display:block;width:100%;height:auto}
+  .exbody{flex:1;min-width:0}
+  .exname{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;text-transform:uppercase;line-height:1.1}
+  .tag{display:inline-block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;border-radius:4px;padding:2px 6px;margin-left:6px;vertical-align:2px}
+  .dose{font-size:13.5px;font-weight:600;margin-top:3px}
+  .last{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .cues{font-size:13px;color:#3a3d42;margin-top:6px}
+  .cues li{margin-left:16px;margin-bottom:2px}
+  .prog{font-size:12.5px;color:var(--muted);margin-top:6px}
+  .prog b{color:var(--ink)}
+  .editbar{display:flex;gap:6px;border-top:1px dashed var(--line);padding:8px 14px;background:#fcfbf8}
+  .editbar .btn{flex:1}
+
+  /* chips */
+  .chips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+  .chip{border:1px solid var(--line);border-radius:999px;padding:5px 13px;font-size:13px;font-weight:600;background:#fff}
+  .chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  /* workout */
+  .sets{display:flex;gap:8px;padding:0 14px 12px;flex-wrap:wrap;align-items:center}
+  .sets input{
+    width:64px;padding:9px 6px;border:1.5px solid var(--line);border-radius:9px;
+    font:inherit;font-weight:600;text-align:center;background:#fff;
+  }
+  .sets input:focus{outline:none;border-color:var(--ink)}
+  .setlbl{font-size:12px;color:var(--muted)}
+
+  /* timer */
+  #timerbar{
+    position:fixed;left:0;right:0;bottom:calc(64px + var(--safe-b));z-index:40;
+    display:none;justify-content:center;pointer-events:none;
+  }
+  #timerbar .inner{
+    pointer-events:auto;background:var(--ink);color:#fff;border-radius:999px;
+    padding:9px 18px;display:flex;gap:14px;align-items:center;
+    font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;letter-spacing:.04em;
+    box-shadow:0 6px 20px rgba(0,0,0,.25);
+  }
+  #timerbar button{color:#f0b1ae;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+  #timerbar.done .inner{background:var(--legs)}
+
+  /* tabbar */
+  nav{
+    position:fixed;left:0;right:0;bottom:0;z-index:50;
+    background:#fff;border-top:1px solid var(--line);
+    display:flex;justify-content:space-around;padding:8px 6px calc(8px + var(--safe-b));
+  }
+  nav button{
+    flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;
+    font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:13px;
+    text-transform:uppercase;letter-spacing:.07em;color:var(--muted);padding:4px 0;
+  }
+  nav button.on{color:var(--ink)}
+  nav .ic{font-size:19px;line-height:1}
+
+  /* modal */
+  #modal{position:fixed;inset:0;z-index:60;background:rgba(20,20,22,.45);display:none;align-items:flex-end;justify-content:center}
+  #modal .sheet{
+    background:var(--paper);width:100%;max-width:640px;max-height:82vh;overflow:auto;
+    border-radius:18px 18px 0 0;padding:16px 14px calc(20px + var(--safe-b));
+  }
+  .sheethead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .pick{display:flex;gap:12px;align-items:center;width:100%;text-align:left;padding:10px;border:1px solid var(--line);border-radius:12px;background:#fff;margin-bottom:8px}
+  .pick .fig{width:92px}
+  .pick .n{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px;text-transform:uppercase;line-height:1.1}
+  .pick .d{font-size:12.5px;color:var(--muted)}
+
+  /* misc */
+  .note{border:1px dashed var(--ink);border-radius:12px;padding:12px 14px;font-size:13.5px;margin-bottom:12px}
+  .note b{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.07em;font-size:14px}
+  .hot{background:var(--push-soft);border:1px solid var(--push)}
+  .warnbar{background:#fff3cd;border:1px solid #e0c469;border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:12px;display:none}
+  .histday{margin-bottom:14px}
+  .histdate{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:17px;text-transform:uppercase}
+  .histrow{font-size:13.5px;padding:3px 0;border-bottom:1px dotted var(--line);display:flex;justify-content:space-between;gap:10px}
+  textarea{width:100%;min-height:110px;font:12px/1.4 ui-monospace,monospace;border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff}
+  input.dayname{font:inherit;font-weight:700;border:1.5px solid var(--line);border-radius:9px;padding:8px 10px;width:100%;background:#fff}
+  .back{font-size:14px;color:var(--muted);margin-bottom:8px;display:inline-flex;gap:6px;align-items:center}
+  .rowbtns{display:flex;gap:6px}
+  .rowbtns .btn{padding:6px 9px}
+  @media (prefers-reduced-motion:reduce){ svg animate{display:none} }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<div id="timerbar"><div class="inner"><span id="tval">1:30</span><button onclick="stopTimer()">stop</button></div></div>
+
+<nav>
+  <button data-v="plan"  onclick="go('plan')"><span class="ic">▦</span>Plan</button>
+  <button data-v="db"    onclick="go('db')"><span class="ic">≣</span>Baza</button>
+  <button data-v="hist"  onclick="go('hist')"><span class="ic">◷</span>Historia</button>
+  <button data-v="help"  onclick="go('help')"><span class="ic">ⓘ</span>Info</button>
+</nav>
+
+<div id="modal"><div class="sheet" id="sheet"></div></div>
+
+<script>
+'use strict';
+/* ============================== STORAGE ============================== */
+const mem = {};
+let storageOK = true;
+function load(k, d){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ storageOK = false; return (k in mem) ? mem[k] : d; } }
+function save(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){ storageOK = false; mem[k] = v; } }
+
+/* ============================== KATEGORIE ============================== */
+const CATS = {
+  push:{ label:'Pchanie',  c:'var(--push)', s:'var(--push-soft)' },
+  pull:{ label:'Ciąganie', c:'var(--pull)', s:'var(--pull-soft)' },
+  legs:{ label:'Nogi',     c:'var(--legs)', s:'var(--legs-soft)' },
+  core:{ label:'Brzuch',   c:'var(--core)', s:'var(--core-soft)' },
+};
+
+/* ============================== BAZA ĆWICZEŃ ==============================
+   anim: { d: czas cyklu (s), props: [...], head: [[x,y] pozaA, pozaB],
+           lines: [ [ [x1,y1,x2,y2]A, [x1,y1,x2,y2]B ], ... ] }
+   Schematy poglądowe: pokazują pozycję i kierunek ruchu.                    */
+const DB = {
+/* ---------- PCHANIE ---------- */
+pushup:{ n:'Pompki klasyczne', c:'push', eq:'masa ciała', dose:'3 serie · 8–15',
+  cues:['Dłonie pod barkami, łokcie ok. 45° od tułowia.','Ciało w linii — brzuch i pośladki napięte.','2 s w dół, dynamicznie w górę.'],
+  prog:'Za łatwo: nogi na podwyższeniu. Za trudno: ręce na podwyższeniu.',
+  anim:{ d:2.2, props:['ground'], head:[[153,62],[153,80]],
+    lines:[ [[40,92,140,70],[40,98,140,88]], [[140,70,140,103],[140,88,140,103]], [[40,92,24,103],[40,98,24,104]] ] } },
+
+pushup_easy:{ n:'Pompki z rękami na podwyższeniu', c:'push', eq:'masa ciała + krzesło', dose:'3 serie · 10–15',
+  cues:['Dłonie na blacie/krześle, ciało w linii.','Im wyżej ręce, tym łatwiej — wariant startowy.'],
+  prog:'Obniżaj podparcie aż dojdziesz do podłogi.',
+  anim:{ d:2.2, props:['ground',['box',140,78,42,27]], head:[[150,46],[150,58]],
+    lines:[ [[36,98,138,56],[36,100,138,68]], [[138,56,148,77],[138,68,148,77]] ] } },
+
+pushup_decline:{ n:'Pompki z nogami na podwyższeniu', c:'push', eq:'masa ciała + krzesło', dose:'3 serie · 8–15',
+  cues:['Stopy na krześle/łóżku, dłonie pod barkami.','Mocniej pracuje górna klatka i barki.','Głowa nie nurkuje pierwsza — prowadzi klatka.'],
+  prog:'Wyżej stopy → pauza 1 s na dole.',
+  anim:{ d:2.2, props:['ground',['box',18,72,38,33]], head:[[155,74],[155,88]],
+    lines:[ [[42,70,142,80],[42,74,142,94]], [[142,80,142,103],[142,94,142,103]] ] } },
+
+pushup_diamond:{ n:'Pompki diamentowe', c:'push', eq:'masa ciała', dose:'3 serie · 6–12',
+  cues:['Dłonie razem pod mostkiem (kciuki i palce wskazujące stykają się).','Łokcie blisko tułowia — mocno pracuje triceps.'],
+  prog:'Wejdź w nie dopiero, gdy klasyczne robisz 15+.',
+  anim:{ d:2.2, props:['ground'], head:[[153,62],[153,80]],
+    lines:[ [[40,92,140,70],[40,98,140,88]], [[140,70,138,103],[140,88,138,103]], [[40,92,24,103],[40,98,24,104]] ] } },
+
+pike:{ n:'Pompki pike', c:'push', eq:'masa ciała', dose:'3 serie · 6–12',
+  cues:['Biodra wysoko, sylwetka odwróconego „V".','Czubek głowy prowadzisz do ziemi między dłonie.'],
+  prog:'Stopy na podwyższeniu — bliżej stania na rękach.',
+  anim:{ d:2.2, props:['ground'], head:[[64,60],[58,80]],
+    lines:[ [[66,103,74,70],[66,103,70,86]], [[74,70,103,42],[70,86,103,46]], [[103,42,146,103],[103,46,146,103]] ] } },
+
+floorpress:{ n:'Wyciskanie hantli leżąc, jednorącz', c:'push', eq:'hantla', dose:'3 serie / stronę · 8–15',
+  cues:['Na plecach, kolana zgięte, stopy na ziemi.','Łokieć do lekkiego dotknięcia podłogi, wyciskasz pionowo.','Tułów się nie skręca — brzuch pracuje w tle.'],
+  prog:'Za lekko: 3 s w dół + 2 s pauzy na dole.',
+  anim:{ d:2.4, props:['ground',['db',[94,42],[104,66]]], head:[[130,97],[130,97]],
+    lines:[ [[40,100,118,100],[40,100,118,100]], [[40,100,26,76],[40,100,26,76]], [[26,76,20,100],[26,76,20,100]], [[106,98,106,52],[106,98,118,74]] ] } },
+
+ohp:{ n:'Wyciskanie hantli nad głowę, stojąc', c:'push', eq:'hantla', dose:'3 serie / stronę · 8–12',
+  cues:['Hantla przy barku, brzuch i pośladki napięte.','Wyciskasz pionowo, bez odchylania lędźwi w tył.','Głowa lekko „przechodzi" do przodu, gdy hantla mija twarz.'],
+  prog:'Za lekko: 3 s opuszczania, powtórzenia do 15–20.',
+  anim:{ d:2.4, props:['ground',['db',[100,32],[98,6]]], head:[[95,40],[95,40]],
+    lines:[ [[100,95,100,50],[100,95,100,50]], [[100,95,92,105],[100,95,92,105]], [[100,95,108,105],[100,95,108,105]], [[102,50,110,38],[102,50,104,14]] ] } },
+
+/* ---------- CIĄGANIE ---------- */
+pullup:{ n:'Podciąganie nachwytem', c:'pull', eq:'drążek', dose:'4 serie · zapas 1–2',
+  cues:['Start od ściągnięcia łopatek w dół, potem ciągniesz łokciami.','Broda nad drążek, opuszczanie z kontrolą.','Przy niskim drążku ugnij kolana, stopy za sobą.'],
+  prog:'Bez pełnych powtórzeń: negatywy albo podchwyt.',
+  anim:{ d:2.6, props:['bar'], head:[[100,42],[100,24]],
+    lines:[ [[84,18,97,48],[84,18,94,30]], [[116,18,103,48],[116,18,106,30]], [[100,56,100,92],[100,38,100,74]], [[100,92,90,110],[100,74,90,90]], [[100,92,110,110],[100,74,112,88]] ] } },
+
+chinup:{ n:'Podciąganie podchwytem', c:'pull', eq:'drążek', dose:'4 serie · zapas 1–2',
+  cues:['Dłonie do siebie — łatwiejszy wariant, więcej bicepsa.','Reszta zasad jak w nachwycie.'],
+  prog:'Gdy zrobisz 8+, wracaj do nachwytu.',
+  anim:{ d:2.6, props:['bar'], head:[[100,42],[100,24]],
+    lines:[ [[84,18,97,48],[84,18,94,30]], [[116,18,103,48],[116,18,106,30]], [[100,56,100,92],[100,38,100,74]], [[100,92,90,110],[100,74,90,90]], [[100,92,110,110],[100,74,112,88]] ] } },
+
+negatives:{ n:'Negatywy (opuszczanie)', c:'pull', eq:'drążek + krzesło', dose:'4 serie · 4–6 zejść',
+  cues:['Wskocz (lub wejdź z krzesła) na górną pozycję.','Opuszczaj się 3–5 sekund, z pełną kontrolą.','To najszybsza droga do pierwszego pełnego podciągnięcia.'],
+  prog:'Wydłużaj opuszczanie do 6–8 s, potem próbuj pełnych.',
+  anim:{ d:3.2, props:['bar'], head:[[100,24],[100,42]],
+    lines:[ [[84,18,94,30],[84,18,97,48]], [[116,18,106,30],[116,18,103,48]], [[100,38,100,74],[100,56,100,92]], [[100,74,90,90],[100,92,90,110]], [[100,74,112,88],[100,92,110,110]] ] } },
+
+scap:{ n:'Podciąganie łopatkowe', c:'pull', eq:'drążek', dose:'3 serie · 6–10',
+  cues:['Proste ręce przez cały czas.','Ruch robią tylko łopatki: ściągasz je w dół i lekko unosisz ciało.','Uczy startu do podciągania.'],
+  prog:'Pauza 2 s na górze ruchu.',
+  anim:{ d:2.0, props:['bar'], head:[[100,46],[100,40]],
+    lines:[ [[84,18,97,50],[84,18,96,44]], [[116,18,103,50],[116,18,104,44]], [[100,58,100,94],[100,52,100,88]], [[100,94,92,110],[100,88,92,104]], [[100,94,108,110],[100,88,108,104]] ] } },
+
+row:{ n:'Wiosłowanie hantlą jednorącz', c:'pull', eq:'hantla + krzesło', dose:'3 serie / stronę · 10–15',
+  cues:['Wolna ręka na krześle, tułów prawie poziomo, plecy proste.','Łokieć ciągniesz do biodra, łopatka domyka ruch.','Biodra „przyspawane" — zero rotacji.'],
+  prog:'Za lekko: 3 s opuszczania + pauza przy biodrze.',
+  anim:{ d:2.2, props:['ground',['chair'],['db',[92,84],[86,58]]], head:[[145,46],[145,46]],
+    lines:[ [[52,103,76,62],[52,103,76,62]], [[76,62,134,55],[76,62,134,55]], [[134,55,150,64],[134,55,150,64]], [[106,57,104,86],[106,57,96,62]] ] } },
+
+activehang:{ n:'Zwis aktywny', c:'pull', eq:'drążek', dose:'2 serie · 20–45 s',
+  cues:['Proste ręce, barki ściągnięte w dół, od uszu.','Przy niskim drążku ugnij kolana, stopy za sobą.','Buduje chwyt i zdrowe barki.'],
+  prog:'Wydłużaj czas; docelowo 60 s.',
+  anim:{ d:2.6, props:['bar'], head:[[100,44],[100,42]],
+    lines:[ [[88,18,97,50],[88,18,96,48]], [[112,18,103,50],[112,18,104,48]], [[100,58,100,90],[100,56,100,88]], [[100,90,92,104],[100,88,92,102]], [[100,90,108,104],[100,88,108,102]] ] } },
+
+/* ---------- NOGI ---------- */
+goblet:{ n:'Goblet squat', c:'legs', eq:'hantla', dose:'3 serie · 10–15',
+  cues:['Hantla pionowo przy mostku, łokcie pod nią.','Pięty na ziemi, kolana w linii palców stóp.','Uda co najmniej do równoległości z podłogą.'],
+  prog:'Za lekko: pauza 2 s na dole, 3 s w dół.',
+  anim:{ d:2.6, props:['ground',['db',[101,48],[102,56]]], head:[[98,32],[98,42]],
+    lines:[ [[95,70,105,87],[92,78,116,82]], [[105,87,103,104],[116,82,114,103]], [[95,70,97,42],[92,78,96,52]], [[97,48,109,55],[96,58,108,63]] ] } },
+
+squat_bw:{ n:'Przysiad bez obciążenia', c:'legs', eq:'masa ciała', dose:'3 serie · 15–25',
+  cues:['Ręce przed sobą jako przeciwwaga.','Technika jak w goblet squat — pełny zakres.','Dobre na rozgrzewkę i dni lżejsze.'],
+  prog:'Przejdź do goblet squat albo zwolnij tempo.',
+  anim:{ d:2.4, props:['ground'], head:[[98,32],[98,42]],
+    lines:[ [[95,70,105,87],[92,78,116,82]], [[105,87,103,104],[116,82,114,103]], [[95,70,97,42],[92,78,96,52]], [[97,48,115,50],[96,58,116,58]] ] } },
+
+lunge:{ n:'Wykroki z hantlą', c:'legs', eq:'hantla', dose:'3 serie · 8–10 / nogę',
+  cues:['Hantla przy klatce albo w ręce po stronie nogi zakrocznej.','Tylne kolano tuż nad ziemię, tułów pionowo.','Przednie kolano stabilnie nad stopą.'],
+  prog:'Za lekko: pauza na dole albo wykrok chodzony.',
+  anim:{ d:2.6, props:['ground',['db',[93,60],[93,66]]], head:[[100,18],[100,26]],
+    lines:[ [[100,28,100,60],[100,34,100,66]], [[100,60,126,74],[100,66,130,72]], [[126,74,128,103],[130,72,130,103]], [[100,60,86,84],[100,66,82,92]], [[86,84,64,96],[82,92,60,98]] ] } },
+
+lunge_rev:{ n:'Wykroki w tył', c:'legs', eq:'hantla', dose:'3 serie · 8–10 / nogę',
+  cues:['Krok w tył zamiast w przód — łagodniejsze dla kolan.','Reszta zasad jak w wykroku klasycznym.'],
+  prog:'Za lekko: pauza na dole.',
+  anim:{ d:2.6, props:['ground',['db',[93,60],[93,66]]], head:[[100,18],[100,26]],
+    lines:[ [[100,28,100,60],[100,34,100,66]], [[100,60,126,74],[100,66,130,72]], [[126,74,128,103],[130,72,130,103]], [[100,60,86,84],[100,66,82,92]], [[86,84,64,96],[82,92,60,98]] ] } },
+
+rdl:{ n:'Rumuński martwy ciąg (RDL)', c:'legs', eq:'hantla', dose:'3 serie · 10–12',
+  cues:['Biodra w tył, kolana minimalnie ugięte, plecy proste jak deska.','Schodzisz do rozciągania z tyłu ud.','Wracasz napinając pośladki — nie „skłonem".'],
+  prog:'Za lekko: wariant na jednej nodze.',
+  anim:{ d:2.8, props:['ground',['db',[88,74],[104,84]]], head:[[104,32],[145,42]],
+    lines:[ [[96,103,98,72],[96,103,100,72]], [[98,72,102,42],[100,72,136,48]], [[100,50,100,78],[122,57,118,88]] ] } },
+
+rdl_sl:{ n:'RDL na jednej nodze', c:'legs', eq:'hantla', dose:'3 serie · 8–10 / nogę',
+  cues:['Noga zakroczna unosi się w tył, biodra równolegle do podłogi.','Balans + tył uda + pośladek jedną nogą.','Wolno i z kontrolą — to ćwiczenie techniczne.'],
+  prog:'Bez hantli na start, potem z obciążeniem.',
+  anim:{ d:3.0, props:['ground',['db',[88,74],[102,82]]], head:[[104,32],[143,42]],
+    lines:[ [[96,103,98,72],[96,103,100,72]], [[98,72,102,44],[100,72,134,50]], [[100,52,100,78],[120,58,116,86]], [[98,72,104,103],[100,72,62,58]] ] } },
+
+bulgarian:{ n:'Przysiad bułgarski', c:'legs', eq:'hantla + krzesło', dose:'3 serie · 8–10 / nogę',
+  cues:['Stopa zakroczna na krześle za Tobą.','Cały ciężar na przedniej nodze, tułów lekko pochylony.','Najcięższe ćwiczenie nóg bez sprzętu — wchodzi, gdy goblet robi się lekki.'],
+  prog:'Bez hantli na start; potem hantla przy klatce.',
+  anim:{ d:2.6, props:['ground',['chair'],['db',[84,42],[86,52]]], head:[[90,20],[92,30]],
+    lines:[ [[90,32,90,62],[92,42,90,70]], [[90,62,96,84],[90,70,104,86]], [[96,84,94,104],[104,86,96,104]], [[90,62,116,78],[90,70,114,86]], [[116,78,142,70],[114,86,142,70]] ] } },
+
+glutebridge:{ n:'Glute bridge (unoszenie bioder)', c:'legs', eq:'mata', dose:'3 serie · 12–15',
+  cues:['Na plecach, stopy blisko pośladków.','Wypychasz biodra w górę napinając pośladki, 2 s pauzy na górze.','Na górze ciało w linii od kolan do barków.'],
+  prog:'Na jednej nodze — druga wyprostowana w powietrzu.',
+  anim:{ d:2.4, props:['ground'], head:[[134,94],[134,94]],
+    lines:[ [[120,98,70,96],[120,98,72,74]], [[70,96,58,78],[72,74,58,76]], [[58,78,52,103],[58,76,52,103]] ] } },
+
+calves:{ n:'Wspięcia na palce', c:'legs', eq:'masa ciała / hantla', dose:'3 serie · 15–20',
+  cues:['Na krawędzi schodka: pełne rozciągnięcie na dole, pauza na górze.','Z hantlą w ręce po stronie pracującej nogi — jednonóż.'],
+  prog:'Jednonóż z hantlą, wolne tempo.',
+  anim:{ d:1.8, props:['ground'], head:[[100,32],[100,26]],
+    lines:[ [[100,103,100,72],[100,97,100,66]], [[100,72,100,44],[100,66,100,38]], [[100,52,110,64],[100,46,110,58]] ] } },
+
+/* ---------- BRZUCH ---------- */
+revcrunch:{ n:'Reverse crunch', c:'core', eq:'mata', dose:'3 serie · 10–15',
+  cues:['Uda pionowo (kolana nad biodrami), łydki poziomo.','Zawijasz miednicę do pępka — biodra odrywają się parę cm od maty.','Spięcie czujesz w dole brzucha, nie z zamachu nóg. Opuszczanie 3 s.'],
+  prog:'Prostuj nogi w fazie opuszczania → unoszenie prostych nóg.',
+  anim:{ d:2.6, props:['ground'], head:[[140,95],[140,95]],
+    lines:[ [[68,99,126,99],[78,97,126,99]], [[68,99,72,68],[78,97,92,66]], [[72,68,46,70],[92,66,66,60]] ] } },
+
+legraise:{ n:'Unoszenie prostych nóg leżąc', c:'core', eq:'mata', dose:'3 serie · 8–12',
+  cues:['Lędźwie wciśnięte w matę przez cały ruch — to warunek.','Nogi proste, opuszczasz tuż nad ziemię bez dotykania.','Jak lędźwie odchodzą od maty, ugnij lekko kolana.'],
+  prog:'Wolniejsze opuszczanie; docelowo hollow body.',
+  anim:{ d:2.8, props:['ground'], head:[[140,95],[140,95]],
+    lines:[ [[70,99,126,99],[70,99,126,99]], [[70,99,28,94],[70,99,52,56]] ] } },
+
+plank:{ n:'Plank (deska)', c:'core', eq:'mata', dose:'2–3 serie · 30–60 s',
+  cues:['Przedramiona pod barkami, pośladki napięte, ciało w linii.','Biodra opadają = koniec serii.'],
+  prog:'Unoś naprzemiennie nogę na 2 s.',
+  anim:{ d:2, props:['ground'], head:[[152,72],[152,72]],
+    lines:[ [[34,98,138,80],[34,98,138,80]], [[138,80,142,102],[138,80,142,102]], [[142,102,162,102],[142,102,162,102]] ] } },
+
+sideplank:{ n:'Side plank (deska bokiem)', c:'core', eq:'mata', dose:'2 serie / stronę · 20–40 s',
+  cues:['Łokieć pod barkiem, ciało w linii, biodra wypchnięte w górę.','Mięśnie skośne — okolica boczków. Wzmacnia je; tłuszcz zdejmuje deficyt.'],
+  prog:'Unieś górną nogę albo wydłuż czas.',
+  anim:{ d:2.4, props:['ground'], head:[[58,66],[58,66]],
+    lines:[ [[62,80,62,103],[62,80,62,103]], [[62,103,84,103],[62,103,84,103]], [[62,80,160,99],[62,78,160,99]] ] } },
+
+deadbug:{ n:'Dead bug', c:'core', eq:'mata', dose:'3 serie · 8–10 / stronę',
+  cues:['Na plecach: ręce pionowo, kolana nad biodrami.','Prostujesz jednocześnie przeciwną rękę i nogę, tuż nad ziemię.','Lędźwie wciśnięte w matę cały czas — jak odchodzą, skróć zakres.'],
+  prog:'Wolniejsze tempo, dłuższa faza wyprostu.',
+  anim:{ d:3.0, props:['ground'], head:[[134,95],[134,95]],
+    lines:[ [[66,99,122,99],[66,99,122,99]], [[118,97,118,60],[118,97,148,76]], [[70,99,74,72],[70,99,52,86]], [[74,72,54,74],[52,86,32,90]] ] } },
+
+climbers:{ n:'Mountain climbers', c:'core', eq:'masa ciała', dose:'3 serie · 30 s pracy / 30 s przerwy',
+  cues:['Pozycja pompki, kolana naprzemiennie dynamicznie do klatki.','Biodra nisko, plecy płasko — nie podskakuj pupą.','Najbardziej „cardio" element — podbija tętno.'],
+  prog:'Wydłużaj czas pracy do 40–45 s.',
+  anim:{ d:0.9, props:['ground'], head:[[153,58],[153,58]],
+    lines:[ [[44,96,140,66],[44,96,140,66]], [[140,66,140,103],[140,66,140,103]], [[92,80,118,84],[92,80,70,92]], [[118,84,112,103],[70,92,50,100]] ] } },
+
+hollow:{ n:'Hollow body hold', c:'core', eq:'mata', dose:'3 serie · 15–30 s',
+  cues:['Lędźwie wciśnięte w matę, barki i nogi uniesione nisko nad ziemię.','Ręce wyciągnięte za głowę albo wzdłuż tułowia (łatwiej).','Trzymasz napięcie całego brzucha — pozycja gimnastyczna.'],
+  prog:'Od kolan zgiętych do prostych nóg i rąk za głową.',
+  anim:{ d:2.6, props:['ground'], head:[[132,84],[132,86]],
+    lines:[ [[70,96,120,92],[70,96,120,92]], [[70,96,34,82],[70,96,34,86]], [[120,92,152,78],[120,92,152,82]] ] } },
+};
+
+/* ============================== DOMYŚLNY PLAN ============================== */
+const DEFAULT_PLAN = {
+  days:[
+    { name:'Mix — akcent klatka', items:[
+      {ex:'pushup',        dose:'3 serie · zapas 2–3'},
+      {ex:'row',           dose:'3 serie / stronę · 10–15'},
+      {ex:'goblet',        dose:'3 serie · 10–15'},
+      {ex:'revcrunch',     dose:'3 serie · 10–15'},
+      {ex:'sideplank',     dose:'2 serie / stronę · 20–40 s'} ]},
+    { name:'Mix — akcent plecy', items:[
+      {ex:'pullup',        dose:'4 serie · zapas 1–2'},
+      {ex:'pushup_decline',dose:'3 serie · 8–15'},
+      {ex:'rdl',           dose:'3 serie · 10–12'},
+      {ex:'deadbug',       dose:'3 serie · 8–10 / stronę'},
+      {ex:'plank',         dose:'2 serie · 30–60 s'} ]},
+    { name:'Mix — akcent barki i nogi', items:[
+      {ex:'pike',          dose:'3 serie · 6–12'},
+      {ex:'floorpress',    dose:'3 serie / stronę · 8–15'},
+      {ex:'lunge',         dose:'3 serie · 8–10 / nogę'},
+      {ex:'climbers',      dose:'3 serie · 30 s / 30 s'},
+      {ex:'activehang',    dose:'2 serie · 20–45 s'} ]},
+  ]
+};
+const DAY_COLORS = ['var(--push)','var(--pull)','var(--legs)','var(--core)','#5b4a8a','#8a4a5b'];
+const DAY_LETTERS = 'ABCDEFGH';
+
+let plan   = load('wt_plan', null) || JSON.parse(JSON.stringify(DEFAULT_PLAN));
+let hist   = load('wt_hist', []);
+const state = { view:'plan', dayIdx:0, edit:false, filter:'all', session:null };
+
+/* ============================== SVG RENDER ============================== */
+function animTag(attr, a, b, d){
+  if(a === b) return '';
+  return `<animate attributeName="${attr}" values="${a};${b};${a}" dur="${d}s" repeatCount="indefinite"/>`;
+}
+function propSVG(p, A){
+  if(p === 'ground') return `<line x1="10" y1="105" x2="190" y2="105" stroke="#b9b4a8" stroke-width="3"/>`;
+  if(p === 'bar')    return `<line x1="30" y1="16" x2="170" y2="16" stroke="#1b1d20" stroke-width="5" stroke-linecap="round"/>`;
+  if(p[0] === 'box') return `<rect x="${p[1]}" y="${p[2]}" width="${p[3]}" height="${p[4]}" fill="none" stroke="#1b1d20" stroke-width="3"/>`;
+  if(p[0] === 'chair') return `<rect x="140" y="66" width="44" height="8" fill="#1b1d20"/><line x1="146" y1="74" x2="146" y2="104" stroke="#1b1d20" stroke-width="4"/><line x1="178" y1="74" x2="178" y2="104" stroke="#1b1d20" stroke-width="4"/>`;
+  if(p[0] === 'db'){
+    const [a,b] = [p[1], p[2]], d = A.d;
+    return `<rect x="${a[0]}" y="${a[1]}" width="24" height="9" rx="3" fill="#1b1d20">${animTag('x',a[0],b[0],d)}${animTag('y',a[1],b[1],d)}</rect>`;
+  }
+  return '';
+}
+function exSVG(id){
+  const ex = DB[id]; if(!ex) return '';
+  const A = ex.anim, col = CATS[ex.c].c, d = A.d;
+  let s = `<svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" aria-label="${ex.n} — schemat">`;
+  for(const p of A.props) s += propSVG(p, A);
+  s += `<g stroke="${col}" stroke-width="5" stroke-linecap="round" fill="none">`;
+  for(const [a,b] of A.lines){
+    s += `<line x1="${a[0]}" y1="${a[1]}" x2="${a[2]}" y2="${a[3]}">`
+       + animTag('x1',a[0],b[0],d) + animTag('y1',a[1],b[1],d)
+       + animTag('x2',a[2],b[2],d) + animTag('y2',a[3],b[3],d)
+       + `</line>`;
+  }
+  s += `</g>`;
+  const [ha,hb] = A.head;
+  s += `<circle cx="${ha[0]}" cy="${ha[1]}" r="9" fill="${col}">${animTag('cx',ha[0],hb[0],d)}${animTag('cy',ha[1],hb[1],d)}</circle>`;
+  return s + `</svg>`;
+}
+
+/* ============================== POMOCNICZE ============================== */
+const $app = document.getElementById('app');
+function esc(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+function savePlan(){ save('wt_plan', plan); }
+function saveHist(){ save('wt_hist', hist); }
+function lastSets(exId){
+  for(let i = hist.length - 1; i >= 0; i--){
+    const e = hist[i].items.find(x => x.ex === exId && x.sets.length);
+    if(e) return { date: hist[i].date, sets: e.sets };
+  }
+  return null;
+}
+function fmtDate(iso){ const d = new Date(iso); return d.toLocaleDateString('pl-PL', {weekday:'short', day:'numeric', month:'short'}); }
+function go(v){ state.view = v; state.edit = false; render(); window.scrollTo(0,0); }
+
+/* ============================== TIMER ============================== */
+let tInt = null, tLeft = 0;
+function startTimer(sec){
+  stopTimer();
+  tLeft = sec;
+  const bar = document.getElementById('timerbar');
+  bar.style.display = 'flex'; bar.classList.remove('done');
+  tick();
+  tInt = setInterval(tick, 1000);
+}
+function tick(){
+  const el = document.getElementById('tval');
+  if(tLeft <= 0){
+    clearInterval(tInt); tInt = null;
+    el.textContent = 'Przerwa skończona — jazda';
+    document.getElementById('timerbar').classList.add('done');
+    setTimeout(stopTimer, 4000);
+    return;
+  }
+  el.textContent = Math.floor(tLeft/60) + ':' + String(tLeft%60).padStart(2,'0');
+  tLeft--;
+}
+function stopTimer(){
+  if(tInt) clearInterval(tInt);
+  tInt = null;
+  document.getElementById('timerbar').style.display = 'none';
+}
+
+/* ============================== MODAL / PICKER ============================== */
+const $modal = document.getElementById('modal'), $sheet = document.getElementById('sheet');
+let pickCB = null, pickCat = 'all';
+function openPicker(cat, cb){
+  pickCB = cb; pickCat = cat || 'all';
+  renderPicker();
+  $modal.style.display = 'flex';
+}
+function closeModal(){ $modal.style.display = 'none'; pickCB = null; }
+$modal.addEventListener('click', e => { if(e.target === $modal) closeModal(); });
+function setPickCat(c){ pickCat = c; renderPicker(); }
+function renderPicker(){
+  const chips = ['all', ...Object.keys(CATS)].map(c =>
+    `<button class="chip ${pickCat===c?'on':''}" onclick="setPickCat('${c}')">${c==='all'?'Wszystkie':CATS[c].label}</button>`).join('');
+  const items = Object.entries(DB)
+    .filter(([id,e]) => pickCat === 'all' || e.c === pickCat)
+    .map(([id,e]) => `
+      <button class="pick" onclick="pickEx('${id}')">
+        <span class="fig" style="background:${CATS[e.c].s}">${exSVG(id)}</span>
+        <span><span class="n">${e.n}</span><br><span class="d">${CATS[e.c].label} · ${e.eq} · ${e.dose}</span></span>
+      </button>`).join('');
+  $sheet.innerHTML = `
+    <div class="sheethead"><h2 class="disp">Wybierz ćwiczenie</h2><button class="btn small ghost" onclick="closeModal()">Zamknij</button></div>
+    <div class="chips">${chips}</div>${items}`;
+}
+function pickEx(id){ if(pickCB) pickCB(id); closeModal(); render(); }
+
+/* ============================== AKCJE PLANU ============================== */
+function addDay(){
+  plan.days.push({ name:'Nowy dzień', items:[] });
+  savePlan(); state.dayIdx = plan.days.length - 1; state.view = 'day'; state.edit = true; render();
+}
+function delDay(i){
+  if(!confirm('Usunąć ten dzień treningowy?')) return;
+  plan.days.splice(i,1); savePlan(); state.view = 'plan'; render();
+}
+function renameDay(i, v){ plan.days[i].name = v.slice(0,60); savePlan(); }
+function moveItem(d, i, dir){
+  const arr = plan.days[d].items, j = i + dir;
+  if(j < 0 || j >= arr.length) return;
+  [arr[i], arr[j]] = [arr[j], arr[i]]; savePlan(); render();
+}
+function delItem(d, i){ plan.days[d].items.splice(i,1); savePlan(); render(); }
+function swapItem(d, i){
+  const cat = DB[plan.days[d].items[i].ex]?.c;
+  openPicker(cat, id => { plan.days[d].items[i] = { ex:id, dose: DB[id].dose }; savePlan(); });
+}
+function addItem(d){ openPicker('all', id => { plan.days[d].items.push({ ex:id, dose: DB[id].dose }); savePlan(); }); }
+function resetPlan(){
+  if(!confirm('Przywrócić domyślny plan A/B/C? Historia treningów zostanie.')) return;
+  plan = JSON.parse(JSON.stringify(DEFAULT_PLAN)); savePlan(); render();
+}
+
+/* ============================== SESJA TRENINGOWA ============================== */
+function startSession(d){
+  state.session = { dayIdx: d, vals: {} };
+  state.view = 'workout'; render(); window.scrollTo(0,0);
+}
+function setVal(item, set, v){
+  const s = state.session;
+  (s.vals[item] = s.vals[item] || {})[set] = v;
+}
+function finishSession(){
+  const s = state.session, day = plan.days[s.dayIdx];
+  const items = day.items.map((it, idx) => ({
+    ex: it.ex, dose: it.dose,
+    sets: Object.keys(s.vals[idx] || {}).sort((a,b)=>a-b).map(k => s.vals[idx][k]).filter(v => v !== '')
+  }));
+  if(!items.some(i => i.sets.length)){ alert('Nic nie wpisałeś — nie ma czego zapisać.'); return; }
+  hist.push({ date: new Date().toISOString(), day: day.name, items });
+  saveHist();
+  state.session = null; state.view = 'hist'; render(); window.scrollTo(0,0);
+}
+function cancelSession(){
+  if(!confirm('Porzucić trening bez zapisu?')) return;
+  state.session = null; state.view = 'day'; render();
+}
+function delSession(i){
+  if(!confirm('Usunąć ten wpis z historii?')) return;
+  hist.splice(i,1); saveHist(); render();
+}
+
+/* ============================== EKSPORT / IMPORT ============================== */
+function doExport(){
+  const data = JSON.stringify({ plan, hist });
+  const ta = document.getElementById('io'); ta.value = data; ta.select();
+  try{ navigator.clipboard.writeText(data); alert('Skopiowane do schowka. Wklej gdzieś bezpiecznie (notatka, menedżer haseł).'); }catch(e){}
+}
+function doImport(){
+  const ta = document.getElementById('io');
+  try{
+    const d = JSON.parse(ta.value);
+    if(!d.plan || !Array.isArray(d.plan.days)) throw 0;
+    plan = d.plan; hist = Array.isArray(d.hist) ? d.hist : [];
+    savePlan(); saveHist(); alert('Wczytane.'); render();
+  }catch(e){ alert('To nie wygląda na poprawny eksport z tej aplikacji.'); }
+}
+
+/* ============================== WIDOKI ============================== */
+function exCard(it, d, i, workout){
+  const e = DB[it.ex];
+  if(!e) return `<div class="card">Nieznane ćwiczenie (${esc(it.ex)}) <button class="btn small" onclick="delItem(${d},${i})">Usuń</button></div>`;
+  const cat = CATS[e.c];
+  const last = lastSets(it.ex);
+  const lastHtml = last ? `<div class="last">Ostatnio (${fmtDate(last.date)}): <b>${last.sets.map(esc).join(' / ')}</b></div>` : '';
+  let setsHtml = '';
+  if(workout){
+    const v = (state.session.vals[i]) || {};
+    setsHtml = `<div class="sets"><span class="setlbl">Powt.:</span>` +
+      [0,1,2,3].map(s => `<input type="text" inputmode="numeric" placeholder="S${s+1}" value="${esc(v[s]||'')}" oninput="setVal(${i},${s},this.value)">`).join('') +
+      `</div>`;
+  }
+  let editHtml = '';
+  if(state.edit && !workout){
+    editHtml = `<div class="editbar">
+      <button class="btn small ghost" onclick="moveItem(${d},${i},-1)">↑</button>
+      <button class="btn small ghost" onclick="moveItem(${d},${i},1)">↓</button>
+      <button class="btn small" onclick="swapItem(${d},${i})">Zamień</button>
+      <button class="btn small ghost" onclick="delItem(${d},${i})">Usuń</button>
+    </div>`;
+  }
+  return `<div class="card ex">
+    <div class="exhead">
+      <div class="fig" style="background:${cat.s}">${exSVG(it.ex)}</div>
+      <div class="exbody">
+        <div class="exname">${e.n}<span class="tag" style="background:${cat.s};color:${cat.c}">${cat.label}</span></div>
+        <div class="dose">${esc(it.dose)}</div>
+        ${lastHtml}
+        <ul class="cues">${e.cues.map(c=>`<li>${c}</li>`).join('')}</ul>
+        <div class="prog"><b>Progresja:</b> ${e.prog}</div>
+      </div>
+    </div>
+    ${setsHtml}${editHtml}
+  </div>`;
+}
+
+function vPlan(){
+  const cards = plan.days.map((day, i) => `
+    <div class="card daycard" onclick="state.dayIdx=${i};go('day')">
+      <div class="daymark" style="background:${DAY_COLORS[i % DAY_COLORS.length]}">${DAY_LETTERS[i] || '•'}</div>
+      <div class="meta"><div class="t">${esc(day.name)}</div>
+      <div class="s">${day.items.length} ćw. · ${day.items.map(it => DB[it.ex]?.n.split(' ')[0] || '?').slice(0,4).join(', ')}${day.items.length>4?'…':''}</div></div>
+      <div class="chev">›</div>
+    </div>`).join('');
+  return `
+    <div class="kicker">Trening w domu · drążek + hantla</div>
+    <h1 class="disp">Twój plan</h1>
+    <div class="warnbar" id="warn">Uwaga: w tym widoku dane się nie zapisują. Otwórz plik w Safari (nie w podglądzie Plików), a najlepiej z hostingu.</div>
+    <div style="height:10px"></div>
+    ${cards}
+    <div class="btnrow">
+      <button class="btn" onclick="addDay()">+ Dodaj dzień</button>
+      <button class="btn ghost" onclick="resetPlan()">Przywróć domyślny</button>
+    </div>
+    <div class="note"><b>Zasada nr 1:</b> w każdej serii zostaw 2–3 powtórzenia w zapasie. Do upadku najwyżej w ostatniej serii ostatniego ćwiczenia. Notuj wyniki — bez tego nie ma progresji.</div>
+    <div class="note hot"><b>Boczki — bez ściemy:</b> żadne ćwiczenie brzucha nie spala tłuszczu z boków. Spalanie punktowe nie istnieje; boczki zdejmuje deficyt kaloryczny. Ćwiczenia budują mięśnie pod spodem i siłę tułowia.</div>`;
+}
+
+function vDay(){
+  const d = state.dayIdx, day = plan.days[d];
+  if(!day) { state.view = 'plan'; return vPlan(); }
+  const name = state.edit
+    ? `<input class="dayname" value="${esc(day.name)}" oninput="renameDay(${d}, this.value)">`
+    : `<h1 class="disp" style="font-size:28px">${esc(day.name)}</h1>`;
+  return `
+    <button class="back" onclick="go('plan')">‹ Plan</button>
+    <div class="kicker">Dzień ${DAY_LETTERS[d] || ''}</div>
+    ${name}
+    <div class="btnrow">
+      <button class="btn primary" onclick="startSession(${d})">Rozpocznij trening</button>
+      <button class="btn ${state.edit?'':'ghost'}" onclick="state.edit=!state.edit;render()">${state.edit?'Gotowe':'Edytuj'}</button>
+      ${state.edit ? `<button class="btn ghost" onclick="delDay(${d})">Usuń dzień</button>` : ''}
+    </div>
+    ${day.items.map((it,i) => exCard(it, d, i, false)).join('')}
+    ${state.edit ? `<button class="btn" style="width:100%" onclick="addItem(${d})">+ Dodaj ćwiczenie</button>` : ''}`;
+}
+
+function vWorkout(){
+  const s = state.session;
+  if(!s){ state.view = 'plan'; return vPlan(); }
+  const d = s.dayIdx, day = plan.days[d];
+  return `
+    <div class="kicker">Trening w toku</div>
+    <h1 class="disp" style="font-size:28px">${esc(day.name)}</h1>
+    <div class="btnrow">
+      <span class="setlbl" style="align-self:center">Przerwa:</span>
+      <button class="btn small" onclick="startTimer(60)">1:00</button>
+      <button class="btn small" onclick="startTimer(90)">1:30</button>
+      <button class="btn small" onclick="startTimer(120)">2:00</button>
+      <button class="btn small" onclick="startTimer(180)">3:00</button>
+    </div>
+    <div class="note">Wpisuj powtórzenia po każdej serii (przy czasówkach wpisz sekundy). Puste pola są pomijane.</div>
+    ${day.items.map((it,i) => exCard(it, d, i, true)).join('')}
+    <div class="btnrow">
+      <button class="btn primary" style="flex:1" onclick="finishSession()">Zakończ i zapisz</button>
+      <button class="btn ghost" onclick="cancelSession()">Porzuć</button>
+    </div>`;
+}
+
+function vDb(){
+  const chips = ['all', ...Object.keys(CATS)].map(c =>
+    `<button class="chip ${state.filter===c?'on':''}" onclick="state.filter='${c}';render()">${c==='all'?'Wszystkie':CATS[c].label}</button>`).join('');
+  const cards = Object.entries(DB)
+    .filter(([id,e]) => state.filter === 'all' || e.c === state.filter)
+    .map(([id,e]) => {
+      const cat = CATS[e.c], last = lastSets(id);
+      return `<div class="card ex"><div class="exhead">
+        <div class="fig" style="background:${cat.s}">${exSVG(id)}</div>
+        <div class="exbody">
+          <div class="exname">${e.n}<span class="tag" style="background:${cat.s};color:${cat.c}">${cat.label}</span></div>
+          <div class="dose">${e.eq} · ${e.dose}</div>
+          ${last ? `<div class="last">Ostatnio: <b>${last.sets.map(esc).join(' / ')}</b></div>` : ''}
+          <ul class="cues">${e.cues.map(c=>`<li>${c}</li>`).join('')}</ul>
+          <div class="prog"><b>Progresja:</b> ${e.prog}</div>
+        </div></div></div>`;
+    }).join('');
+  return `<div class="kicker">${Object.keys(DB).length} ćwiczeń · schematy poglądowe</div>
+    <h1 class="disp">Baza ćwiczeń</h1>
+    <div class="chips">${chips}</div>${cards}`;
+}
+
+function vHist(){
+  if(!hist.length) return `<div class="kicker">Dziennik</div><h1 class="disp">Historia</h1>
+    <div class="note" style="margin-top:12px">Pusto. Wejdź w dzień treningowy, kliknij „Rozpocznij trening", wpisuj powtórzenia i zapisz — wpisy pojawią się tutaj, a przy ćwiczeniach zobaczysz „ostatnio".</div>${ioBlock()}`;
+  const rows = hist.slice().reverse().map((h, ri) => {
+    const i = hist.length - 1 - ri;
+    const lines = h.items.filter(it => it.sets.length)
+      .map(it => `<div class="histrow"><span>${DB[it.ex]?.n || it.ex}</span><b>${it.sets.map(esc).join(' / ')}</b></div>`).join('');
+    return `<div class="card histday">
+      <div style="display:flex;justify-content:space-between;align-items:baseline">
+        <div><span class="histdate">${fmtDate(h.date)}</span> <span class="setlbl">· ${esc(h.day)}</span></div>
+        <button class="btn small ghost" onclick="delSession(${i})">Usuń</button>
+      </div>${lines}</div>`;
+  }).join('');
+  return `<div class="kicker">${hist.length} zapisanych treningów</div><h1 class="disp">Historia</h1>
+    <div style="height:10px"></div>${rows}${ioBlock()}`;
+}
+function ioBlock(){
+  return `<div class="card"><div class="exname" style="margin-bottom:6px">Kopia zapasowa</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:8px">Dane siedzą w pamięci tej przeglądarki. Rób co jakiś czas eksport — wyczyszczenie danych Safari je skasuje.</p>
+    <textarea id="io" placeholder="Tu pojawi się eksport / tu wklej dane do importu"></textarea>
+    <div class="btnrow"><button class="btn small" onclick="doExport()">Eksportuj</button><button class="btn small ghost" onclick="doImport()">Importuj</button></div></div>`;
+}
+
+function vHelp(){
+  return `<div class="kicker">Jak tego używać</div><h1 class="disp">Info</h1>
+  <div style="height:10px"></div>
+  <div class="card"><div class="exname">Rozgrzewka — zawsze, 5–6 min</div>
+    <ul class="cues" style="margin-top:6px">
+      <li>Pajacyki 60 s, krążenia ramion przód/tył.</li>
+      <li>Hantelki 1,5 kg: unoszenia bokiem ×15, w przód ×15, krążenia prostych rąk ×10 — to ich jedyna sensowna rola.</li>
+      <li>Krążenia bioder, 10 powolnych przysiadów, 8 pompek na kolanach.</li>
+    </ul></div>
+  <div class="card"><div class="exname">Zasady</div>
+    <ul class="cues" style="margin-top:6px">
+      <li>Zapas 2–3 powtórzeń w każdej serii. Trening kończysz zmęczony, nie zniszczony.</li>
+      <li>Minimum dzień przerwy między treningami siłowymi. Basen i piłka w dni wolne.</li>
+      <li>Białko ok. 1,6–2 g / kg masy ciała dziennie.</li>
+      <li>Progresja: trudniejszy wariant, wolniejsze tempo, pauzy — kiedy górna granica powtórzeń przychodzi łatwo. Historia i „ostatnio" są od tego, żebyś to widział.</li>
+      <li>Boczki i brzuch odsłania deficyt kaloryczny, nie ćwiczenia brzucha. Spalanie punktowe nie istnieje.</li>
+    </ul></div>
+  <div class="card"><div class="exname">Jak zrobić z tego „aplikację"</div>
+    <ul class="cues" style="margin-top:6px">
+      <li>Wrzuć ten plik na hosting (np. GitHub Pages) i otwórz adres w Safari.</li>
+      <li>Udostępnij → „Dodaj do ekranu początkowego" — dostaniesz ikonę i pełny ekran.</li>
+      <li>Otwierany lokalnie też działa, ale tylko bezpośrednio w Safari; podgląd w aplikacji Pliki nie uruchamia zapisu danych.</li>
+      <li>Dane (plan + historia) żyją w pamięci przeglądarki dla danego adresu — rób eksport w zakładce Historia.</li>
+    </ul></div>
+  <div class="note">Schematy ćwiczeń są poglądowe: pokazują pozycję i kierunek ruchu, nie zastępują nauki techniki. Jak coś boli w stawie (nie mięśniowo) — odpuść ćwiczenie, nie cały trening.</div>`;
+}
+
+/* ============================== RENDER ============================== */
+function render(){
+  const v = state.view;
+  $app.innerHTML = v==='plan' ? vPlan() : v==='day' ? vDay() : v==='workout' ? vWorkout()
+                 : v==='db' ? vDb() : v==='hist' ? vHist() : vHelp();
+  document.querySelectorAll('nav button').forEach(b => {
+    const on = b.dataset.v === v || (v==='day' || v==='workout') && b.dataset.v === 'plan';
+    b.classList.toggle('on', on);
+  });
+  const w = document.getElementById('warn');
+  if(w && !storageOK) w.style.display = 'block';
+}
+render();
+</script>
+</body>
+</html>
