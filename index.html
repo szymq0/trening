@@ -540,6 +540,21 @@ const DEFAULT_PLAN = {
       {ex:'activehang',    dose:'2 serie · 20–45 s'} ]},
   ]
 };
+/* Gotowe presety dni treningowych — dodawane jednym tapnięciem */
+const PRESETS = [
+  { name:'Góra ciała', desc:'Drążek + hantla. Pchanie i ciąganie naprzemiennie.',
+    items:['pullup','pushup','row','pike','shouldertaps'] },
+  { name:'Dół ciała', desc:'Hantla + mata. Przód i tył nóg, pośladki, łydki.',
+    items:['goblet','rdl','lunge_rev','glutebridge','calves'] },
+  { name:'Brzuch express', desc:'Sama mata, ok. 15–20 min. Prosty, skosy i anty-rotacja.',
+    items:['revcrunch','deadbug','sideplank','climbers','hollow'] },
+  { name:'Zero sprzętu', desc:'Hotel, delegacja, podłoga. Nic nie potrzebujesz.',
+    items:['squat_bw','pushup','glutebridge','superman','plank','jumpsquat'] },
+  { name:'Zdrowe plecy i postawa', desc:'Prostowniki grzbietu, tylny bark, stabilizacja. Przeciwwaga dla siedzenia.',
+    items:['superman','birddog','reardelt','rdl','sideplank'] },
+  { name:'Kondycja — interwały', desc:'Podbija tętno. Rób w obwodzie: ćwiczenie po ćwiczeniu, przerwa po rundzie.',
+    items:['jumpsquat','climbers','stepup','vup'] },
+];
 const DAY_COLORS = ['var(--push)','var(--pull)','var(--legs)','var(--core)','#5b4a8a','#8a4a5b'];
 const DAY_LETTERS = 'ABCDEFGH';
 
@@ -653,6 +668,38 @@ function renderPicker(){
     <div class="chips">${chips}</div>${items}`;
 }
 function pickEx(id){ if(pickCB) pickCB(id); closeModal(); render(); }
+
+/* presety */
+function presetMiniBar(ids){
+  const agg = {};
+  for(const id of ids){ const m = MLOAD[id]; if(!m) continue; for(const k in m) agg[k] = (agg[k]||0) + m[k]; }
+  const tot = Object.values(agg).reduce((a,b) => a+b, 0);
+  if(!tot) return '';
+  const parts = Object.entries(agg).map(([k,v]) => [k, Math.round(v/tot*100)]).sort((a,b) => b[1]-a[1]);
+  const bar = parts.map(([k,v]) => `<i style="width:${v}%;background:${MUSC[k].c}"></i>`).join('');
+  const cap = parts.filter(p => p[1] >= 5).map(([k,v]) => `${MUSC[k].l} ${v}%`).join(' · ');
+  return `<div class="mbar">${bar}</div><div class="mcap">${cap}</div>`;
+}
+function openPresets(){
+  const cards = PRESETS.map((p, i) => `
+    <button class="pick" onclick="addPreset(${i})" style="display:block">
+      <span class="n">${p.name}</span> <span class="d">· ${p.items.length} ćw.</span><br>
+      <span class="d">${p.desc}</span><br>
+      <span class="d">${p.items.map(id => DB[id]?.n).join(' → ')}</span>
+      ${presetMiniBar(p.items)}
+    </button>`).join('');
+  $sheet.innerHTML = `
+    <div class="sheethead"><h2 class="disp">Presety</h2><button class="btn small ghost" onclick="closeModal()">Zamknij</button></div>
+    <p class="mcap" style="margin-bottom:10px">Preset dodaje się jako nowy dzień — potem możesz go dowolnie edytować, zamieniać ćwiczenia i łączyć w supersety.</p>
+    ${cards}`;
+  $modal.style.display = 'flex';
+}
+function addPreset(i){
+  const p = PRESETS[i];
+  plan.days.push({ name: p.name, items: p.items.map(id => ({ ex:id, dose: DB[id].dose })) });
+  savePlan(); closeModal();
+  state.dayIdx = plan.days.length - 1; state.view = 'day'; state.edit = false; render(); window.scrollTo(0,0);
+}
 
 /* ============================== AKCJE PLANU ============================== */
 function addDay(){
@@ -836,6 +883,7 @@ function vPlan(){
     ${cards}
     <div class="btnrow">
       <button class="btn" onclick="addDay()">+ Dodaj dzień</button>
+      <button class="btn" onclick="openPresets()">Presety</button>
       <button class="btn ghost" onclick="resetPlan()">Przywróć domyślny</button>
     </div>
     <div class="note"><b>Zasada nr 1:</b> w każdej serii zostaw 2–3 powtórzenia w zapasie. Do upadku najwyżej w ostatniej serii ostatniego ćwiczenia. Notuj wyniki — bez tego nie ma progresji.</div>`;
