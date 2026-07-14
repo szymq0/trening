@@ -6,6 +6,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#1b1d20">
+<meta name="apple-mobile-web-app-title" content="Trening">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
 <title>Trening — plan domowy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -16,8 +19,17 @@
     --pull:#2a6f97; --pull-soft:#eaf1f6;
     --legs:#2d6a4f; --legs-soft:#eaf2ee;
     --core:#b06a10; --core-soft:#f7efe2;
+    --text2:#3a3d42;
     --safe-b: env(safe-area-inset-bottom, 0px);
   }
+  html[data-theme="dark"]{
+    --ink:#e9e7e2; --paper:#141518; --muted:#9aa0a7; --line:#34373d; --card:#1e2024;
+    --push:#e05a56; --pull:#4f91ba; --legs:#4f8d72; --core:#d08c2f;
+    --push-soft:#372221; --pull-soft:#1d2932; --legs-soft:#1f2c26; --core-soft:#302718;
+    --text2:#c9ccd1;
+  }
+  svg .pk{stroke:var(--ink)}
+  svg .pf{fill:var(--ink)}
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   html,body{height:100%}
   body{
@@ -48,9 +60,9 @@
     display:inline-flex;align-items:center;justify-content:center;gap:8px;
     border:1.5px solid var(--ink);border-radius:10px;padding:10px 16px;
     font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:16px;
-    text-transform:uppercase;letter-spacing:.06em;background:#fff;
+    text-transform:uppercase;letter-spacing:.06em;background:var(--card);
   }
-  .btn.primary{background:var(--ink);color:#fff}
+  .btn.primary{background:var(--ink);color:var(--paper)}
   .btn.small{padding:6px 11px;font-size:14px;border-width:1px}
   .btn.ghost{border-color:var(--line);color:var(--muted)}
   .btn:active{transform:translateY(1px)}
@@ -66,23 +78,24 @@
   .tag{display:inline-block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;border-radius:4px;padding:2px 6px;margin-left:6px;vertical-align:2px}
   .dose{font-size:13.5px;font-weight:600;margin-top:3px}
   .last{font-size:12.5px;color:var(--muted);margin-top:2px}
-  .cues{font-size:13px;color:#3a3d42;margin-top:6px}
+  .cues{font-size:13px;color:var(--text2);margin-top:6px}
   .cues li{margin-left:16px;margin-bottom:2px}
   .prog{font-size:12.5px;color:var(--muted);margin-top:6px}
+  .yt{display:inline-block;margin-top:7px;font-size:12.5px;font-weight:600;color:var(--pull);text-decoration:none}
   .prog b{color:var(--ink)}
-  .editbar{display:flex;gap:6px;border-top:1px dashed var(--line);padding:8px 14px;background:#fcfbf8}
+  .editbar{display:flex;gap:6px;border-top:1px dashed var(--line);padding:8px 14px;background:var(--paper)}
   .editbar .btn{flex:1}
 
   /* chips */
   .chips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
-  .chip{border:1px solid var(--line);border-radius:999px;padding:5px 13px;font-size:13px;font-weight:600;background:#fff}
-  .chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .chip{border:1px solid var(--line);border-radius:999px;padding:5px 13px;font-size:13px;font-weight:600;background:var(--card)}
+  .chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 
   /* workout */
   .sets{display:flex;gap:8px;padding:0 14px 12px;flex-wrap:wrap;align-items:center}
   .sets input{
     width:64px;padding:9px 6px;border:1.5px solid var(--line);border-radius:9px;
-    font:inherit;font-weight:600;text-align:center;background:#fff;
+    font:inherit;font-weight:600;text-align:center;background:var(--card);
   }
   .sets input:focus{outline:none;border-color:var(--ink)}
   .setlbl{font-size:12px;color:var(--muted)}
@@ -93,7 +106,7 @@
     display:none;justify-content:center;pointer-events:none;
   }
   #timerbar .inner{
-    pointer-events:auto;background:var(--ink);color:#fff;border-radius:999px;
+    pointer-events:auto;background:var(--ink);color:var(--paper);border-radius:999px;
     padding:9px 18px;display:flex;gap:14px;align-items:center;
     font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;letter-spacing:.04em;
     box-shadow:0 6px 20px rgba(0,0,0,.25);
@@ -104,7 +117,7 @@
   /* tabbar */
   nav{
     position:fixed;left:0;right:0;bottom:0;z-index:50;
-    background:#fff;border-top:1px solid var(--line);
+    background:var(--card);border-top:1px solid var(--line);
     display:flex;justify-content:space-around;padding:8px 6px calc(8px + var(--safe-b));
   }
   nav button{
@@ -122,20 +135,29 @@
     border-radius:18px 18px 0 0;padding:16px 14px calc(20px + var(--safe-b));
   }
   .sheethead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-  .pick{display:flex;gap:12px;align-items:center;width:100%;text-align:left;padding:10px;border:1px solid var(--line);border-radius:12px;background:#fff;margin-bottom:8px}
+  .pick{display:flex;gap:12px;align-items:center;width:100%;text-align:left;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--card);margin-bottom:8px}
   .pick .fig{width:92px}
   .pick .n{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px;text-transform:uppercase;line-height:1.1}
   .pick .d{font-size:12.5px;color:var(--muted)}
+
+  /* muscle load */
+  .ssgroup{border:2px solid var(--ink);border-radius:16px;padding:8px 8px 0;margin-bottom:12px}
+  .ssgroup .card{margin-bottom:8px}
+  .sslabel{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:0 6px 6px}
+  .mbar{display:flex;height:6px;border-radius:3px;overflow:hidden;margin-top:7px;background:var(--line)}
+  .mbar i{display:block;height:100%}
+  .mbar.big{height:13px;border-radius:6px}
+  .mcap{font-size:11.5px;color:var(--muted);margin-top:3px}
 
   /* misc */
   .note{border:1px dashed var(--ink);border-radius:12px;padding:12px 14px;font-size:13.5px;margin-bottom:12px}
   .note b{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.07em;font-size:14px}
   .hot{background:var(--push-soft);border:1px solid var(--push)}
-  .warnbar{background:#fff3cd;border:1px solid #e0c469;border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:12px;display:none}
+  .warnbar{background:#fff3cd;border:1px solid #e0c469;border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:12px;display:none;color:#5c4a12}
   .histday{margin-bottom:14px}
   .histdate{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:17px;text-transform:uppercase}
   .histrow{font-size:13.5px;padding:3px 0;border-bottom:1px dotted var(--line);display:flex;justify-content:space-between;gap:10px}
-  textarea{width:100%;min-height:110px;font:12px/1.4 ui-monospace,monospace;border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff}
+  textarea{width:100%;min-height:110px;font:12px/1.4 ui-monospace,monospace;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--card)}
   input.dayname{font:inherit;font-weight:700;border:1.5px solid var(--line);border-radius:9px;padding:8px 10px;width:100%;background:#fff}
   .back{font-size:14px;color:var(--muted);margin-bottom:8px;display:inline-flex;gap:6px;align-items:center}
   .rowbtns{display:flex;gap:6px}
@@ -171,6 +193,40 @@ const CATS = {
   pull:{ label:'Ciąganie', c:'var(--pull)', s:'var(--pull-soft)' },
   legs:{ label:'Nogi',     c:'var(--legs)', s:'var(--legs-soft)' },
   core:{ label:'Brzuch',   c:'var(--core)', s:'var(--core-soft)' },
+};
+
+/* Grupy mięśniowe + szacunkowy rozkład obciążenia (%) każdego ćwiczenia.
+   To przybliżenia do balansowania planu, nie wyniki badań.               */
+const MUSC = {
+  kl:{ l:'Klatka',  c:'#d64541' },
+  ba:{ l:'Barki',   c:'#7b5ea7' },
+  ra:{ l:'Ramiona', c:'#5f6b76' },
+  pl:{ l:'Plecy',   c:'#2a6f97' },
+  no:{ l:'Nogi',    c:'#2d6a4f' },
+  br:{ l:'Brzuch',  c:'#b06a10' },
+};
+const MLOAD = {
+  pushup:{kl:55,ra:20,ba:15,br:10}, pushup_easy:{kl:55,ra:20,ba:15,br:10},
+  pushup_decline:{kl:45,ba:30,ra:20,br:5}, pushup_diamond:{ra:45,kl:35,ba:10,br:10},
+  archer:{kl:60,ra:20,ba:10,br:10}, pike:{ba:60,ra:25,br:15},
+  floorpress:{kl:50,ra:25,ba:10,br:15}, ohp:{ba:55,ra:25,br:20},
+  dips:{ra:45,kl:35,ba:20},
+  pullup:{pl:60,ra:25,br:15}, chinup:{pl:50,ra:35,br:15}, negatives:{pl:55,ra:30,br:15},
+  scap:{pl:75,ba:15,br:10}, row:{pl:65,ra:20,br:15}, tablerow:{pl:60,ra:25,br:15},
+  activehang:{pl:45,ra:30,ba:15,br:10},
+  goblet:{no:75,br:15,pl:10}, squat_bw:{no:80,br:15,pl:5},
+  lunge:{no:85,br:15}, lunge_rev:{no:85,br:15},
+  rdl:{no:60,pl:30,br:10}, rdl_sl:{no:60,pl:25,br:15},
+  bulgarian:{no:85,br:15}, glutebridge:{no:85,br:15}, glutebridge_sl:{no:80,br:20},
+  boxpistol:{no:80,br:20}, wallsit:{no:90,br:10}, calves:{no:100},
+  revcrunch:{br:100}, legraise:{br:95,no:5}, plank:{br:80,ba:10,no:10},
+  sideplank:{br:90,ba:10}, deadbug:{br:100}, climbers:{br:60,ba:15,no:15,kl:10},
+  hollow:{br:100}, birddog:{br:55,pl:30,no:15}, superman:{pl:70,no:20,br:10},
+  shouldertaps:{br:55,ba:25,kl:10,ra:10},
+  spiderman:{kl:45,br:30,ra:15,ba:10}, latraise:{ba:80,ra:20},
+  reardelt:{ba:60,pl:30,ra:10}, towelrow:{pl:60,ra:25,br:15},
+  jumpsquat:{no:80,br:20}, stepup:{no:85,br:15},
+  sidebend:{br:90,no:10}, vup:{br:90,no:10},
 };
 
 /* ============================== BAZA ĆWICZEŃ ==============================
@@ -247,10 +303,10 @@ scap:{ n:'Podciąganie łopatkowe', c:'pull', eq:'drążek', dose:'3 serie · 6�
     lines:[ [[84,18,97,50],[84,18,96,44]], [[116,18,103,50],[116,18,104,44]], [[100,58,100,94],[100,52,100,88]], [[100,94,92,110],[100,88,92,104]], [[100,94,108,110],[100,88,108,104]] ] } },
 
 row:{ n:'Wiosłowanie hantlą jednorącz', c:'pull', eq:'hantla + krzesło', dose:'3 serie / stronę · 10–15',
-  cues:['Wolna ręka na krześle, tułów prawie poziomo, plecy proste.','Łokieć ciągniesz do biodra, łopatka domyka ruch.','Biodra „przyspawane" — zero rotacji.'],
-  prog:'Za lekko: 3 s opuszczania + pauza przy biodrze.',
-  anim:{ d:2.2, props:['ground',['chair'],['db',[92,84],[86,58]]], head:[[145,46],[145,46]],
-    lines:[ [[52,103,76,62],[52,103,76,62]], [[76,62,134,55],[76,62,134,55]], [[134,55,150,64],[134,55,150,64]], [[106,57,104,86],[106,57,96,62]] ] } },
+  cues:['Wolna ręka na krześle, tułów prawie poziomo, plecy proste.','Łokieć prowadzisz w górę wzdłuż tułowia, aż mija linię pleców; hantla ląduje przy żebrach/biodrze, nie przy pasze.','Na górze łopatka domyka ruch, opuszczasz z kontrolą. Biodra „przyspawane" — zero rotacji tułowia.'],
+  prog:'Za lekko: 3 s opuszczania + pauza 1 s przy żebrach.',
+  anim:{ d:2.6, props:['ground',['chair'],['db',[94,88],[84,64]]], head:[[145,46],[145,46]],
+    lines:[ [[52,103,76,62],[52,103,76,62]], [[76,62,134,55],[76,62,134,55]], [[134,55,150,64],[134,55,150,64]], [[106,57,108,76],[106,57,94,52]], [[108,76,106,90],[94,52,96,66]] ] } },
 
 activehang:{ n:'Zwis aktywny', c:'pull', eq:'drążek', dose:'2 serie · 20–45 s',
   cues:['Proste ręce, barki ściągnięte w dół, od uszu.','Przy niskim drążku ugnij kolana, stopy za sobą.','Buduje chwyt i zdrowe barki.'],
@@ -333,7 +389,7 @@ plank:{ n:'Plank (deska)', c:'core', eq:'mata', dose:'2–3 serie · 30–60 s',
     lines:[ [[34,98,138,80],[34,98,138,80]], [[138,80,142,102],[138,80,142,102]], [[142,102,162,102],[142,102,162,102]] ] } },
 
 sideplank:{ n:'Side plank (deska bokiem)', c:'core', eq:'mata', dose:'2 serie / stronę · 20–40 s',
-  cues:['Łokieć pod barkiem, ciało w linii, biodra wypchnięte w górę.','Mięśnie skośne — okolica boczków. Wzmacnia je; tłuszcz zdejmuje deficyt.'],
+  cues:['Łokieć pod barkiem, ciało w linii, biodra wypchnięte w górę.','Mięśnie skośne brzucha. Ćwiczenie je wzmacnia; tkankę tłuszczową redukuje deficyt kaloryczny.'],
   prog:'Unieś górną nogę albo wydłuż czas.',
   anim:{ d:2.4, props:['ground'], head:[[58,66],[58,66]],
     lines:[ [[62,80,62,103],[62,80,62,103]], [[62,103,84,103],[62,103,84,103]], [[62,80,160,99],[62,78,160,99]] ] } },
@@ -355,6 +411,110 @@ hollow:{ n:'Hollow body hold', c:'core', eq:'mata', dose:'3 serie · 15–30 s',
   prog:'Od kolan zgiętych do prostych nóg i rąk za głową.',
   anim:{ d:2.6, props:['ground'], head:[[132,84],[132,86]],
     lines:[ [[70,96,120,92],[70,96,120,92]], [[70,96,34,82],[70,96,34,86]], [[120,92,152,78],[120,92,152,82]] ] } },
+
+/* ---------- MASA CIAŁA — ROZSZERZENIE ---------- */
+archer:{ n:'Pompki archer', c:'push', eq:'masa ciała', dose:'3 serie · 5–8 / stronę',
+  cues:['Ręce bardzo szeroko; uginasz jedną, druga prostuje się w bok (widok od przodu).','Przenosisz tułów nad pracującą rękę — większość ciężaru na jednej stronie.','Pomost do pompki na jednej ręce.'],
+  prog:'Coraz mniej podpórki z prostej ręki.',
+  anim:{ d:2.6, props:['ground'], head:[[100,56],[82,66]],
+    lines:[ [[60,70,140,70],[42,80,122,76]], [[60,70,30,103],[42,80,30,103]], [[140,70,170,103],[122,76,170,103]], [[100,70,100,88],[82,78,82,94]] ] } },
+
+dips:{ n:'Dipy na krześle', c:'push', eq:'masa ciała + krzesło', dose:'3 serie · 8–12',
+  cues:['Dłonie na krawędzi krzesła za plecami, nogi wyciągnięte przed siebie.','Łokcie uginasz do ok. 90°, idą prosto w tył, nie na boki.','Barki z dala od uszu; jak ciągnie w przodzie barku, skróć zakres.'],
+  prog:'Stopy dalej od krzesła; docelowo na drugim krześle.',
+  anim:{ d:2.4, props:['ground',['chairL']], head:[[66,32],[66,46]],
+    lines:[ [[64,46,60,66],[64,60,60,66]], [[64,46,88,84],[64,60,90,92]], [[88,84,122,88],[90,92,122,92]], [[122,88,126,104],[122,92,126,104]] ] } },
+
+tablerow:{ n:'Wiosłowanie pod stołem', c:'pull', eq:'masa ciała + solidny stół', dose:'3 serie · 6–12',
+  cues:['Chwytasz krawędź blatu, ciało proste, pięty na podłodze.','Ciągniesz klatkę do blatu, łopatki ściągnięte.','Stół musi być ciężki i stabilny — sprawdź, zanim zawiśniesz.'],
+  prog:'Im bardziej poziomo ciało, tym ciężej.',
+  anim:{ d:2.4, props:['ground',['table']], head:[[54,84],[58,62]],
+    lines:[ [[150,100,68,90],[150,100,72,68]], [[68,90,76,54],[72,68,76,54]], [[68,90,90,54],[72,68,92,54]] ] } },
+
+wallsit:{ n:'Krzesełko przy ścianie', c:'legs', eq:'masa ciała + ściana', dose:'3 serie · 30–60 s',
+  cues:['Plecy płasko przy ścianie, uda równolegle do podłogi, kolana nad kostkami.','Izometria: trzymasz pozycję i spokojnie oddychasz.'],
+  prog:'Wydłużaj czas; wersja z hantlą na udach.',
+  anim:{ d:2, props:['ground',['wall']], head:[[40,32],[40,32]],
+    lines:[ [[40,44,40,78],[40,44,40,78]], [[40,78,72,80],[40,78,72,80]], [[72,80,72,104],[72,80,72,104]] ] } },
+
+boxpistol:{ n:'Przysiad jednonóż do krzesła', c:'legs', eq:'masa ciała + krzesło', dose:'3 serie · 5–8 / nogę',
+  cues:['Krzesło za Tobą; na jednej nodze siadasz z kontrolą, dotykasz siedziska i wstajesz.','Druga noga i ręce w przód jako przeciwwaga.','To progresja w stronę pistol squata.'],
+  prog:'Niższe siedzisko → samo dotknięcie bez siadania.',
+  anim:{ d:2.8, props:['ground',['chair']], head:[[110,26],[122,32]],
+    lines:[ [[112,66,110,38],[138,64,124,42]], [[112,66,108,86],[138,64,112,84]], [[108,86,110,104],[112,84,110,104]], [[112,66,80,76],[138,64,96,68]], [[111,46,86,50],[124,48,98,52]] ] } },
+
+glutebridge_sl:{ n:'Glute bridge jednonóż', c:'legs', eq:'mata', dose:'3 serie · 8–12 / nogę',
+  cues:['Jak zwykły glute bridge, ale jedna noga wyprostowana w powietrzu.','Biodra równo — strona wolnej nogi nie może opadać.'],
+  prog:'Pauza 2 s na górze.',
+  anim:{ d:2.4, props:['ground'], head:[[134,94],[134,94]],
+    lines:[ [[120,98,70,96],[120,98,72,74]], [[70,96,58,78],[72,74,58,76]], [[58,78,52,103],[58,76,52,103]], [[70,96,34,86],[72,74,30,62]] ] } },
+
+birddog:{ n:'Bird dog', c:'core', eq:'mata', dose:'3 serie · 8–10 / stronę',
+  cues:['Klęk podparty; przeciwna ręka i noga prostują się jednocześnie do poziomu.','Biodra i plecy nieruchomo, bez skręcania tułowia.','Pauza 1–2 s w wyproście.'],
+  prog:'Dłuższa pauza; łokieć do kolana pod tułowiem między powtórzeniami.',
+  anim:{ d:2.8, props:['ground'], head:[[52,66],[52,66]],
+    lines:[ [[64,74,116,78],[64,74,116,78]], [[64,74,60,104],[64,74,60,104]], [[116,78,120,104],[116,78,120,104]], [[70,74,74,102],[64,74,30,64]], [[112,78,108,102],[116,78,152,66]] ] } },
+
+superman:{ n:'Superman (na brzuchu)', c:'core', eq:'mata', dose:'3 serie · 10–12, pauza 2 s',
+  cues:['Leżąc na brzuchu unosisz jednocześnie ręce, klatkę i nogi kilka cm nad matę.','Wzrok w matę, kark w przedłużeniu kręgosłupa.','Prostowniki grzbietu — dolny segment silnych pleców.'],
+  prog:'Dłuższa pauza; naprzemiennie ręka/noga, jeśli za ciężko.',
+  anim:{ d:2.6, props:['ground'], head:[[48,98],[46,88]],
+    lines:[ [[62,100,34,100],[62,96,32,84]], [[62,100,130,100],[62,96,130,98]], [[130,100,164,100],[130,98,164,88]] ] } },
+
+shouldertaps:{ n:'Plank z dotknięciem barku', c:'core', eq:'masa ciała', dose:'3 serie · 8–10 / stronę',
+  cues:['Pozycja pompki, stopy szerzej dla stabilności.','Dłoń dotyka przeciwnego barku; biodra nie bujają na boki.','Anty-rotacja: brzuch trzyma tułów sztywno.'],
+  prog:'Węziej stopy = trudniej.',
+  anim:{ d:2.0, props:['ground'], head:[[153,58],[153,58]],
+    lines:[ [[44,96,140,66],[44,96,140,66]], [[142,66,146,103],[142,66,146,103]], [[134,68,130,103],[134,68,146,60]] ] } },
+
+/* ---------- ROZSZERZENIE 2 ---------- */
+spiderman:{ n:'Pompki spiderman', c:'push', eq:'masa ciała', dose:'3 serie · 6–10 / stronę',
+  cues:['Podczas schodzenia w dół kolano wędruje bokiem do łokcia.','Wracasz do pełnej pompki, potem druga strona.','Pompka połączona z pracą skosów.'],
+  prog:'Wolniejsze tempo; kolano przy łokciu 1 s.',
+  anim:{ d:2.4, props:['ground'], head:[[153,62],[153,76]],
+    lines:[ [[44,92,140,70],[44,96,140,86]], [[140,70,140,103],[140,86,140,103]], [[44,92,26,103],[44,96,26,104]], [[44,92,38,99],[44,96,92,84]], [[38,99,30,104],[92,84,86,100]] ] } },
+
+latraise:{ n:'Unoszenia bokiem (lekkie hantelki)', c:'push', eq:'lekkie hantelki', dose:'3 serie · 20–30',
+  cues:['Proste ręce unosisz bokiem do poziomu, łokcie miękkie.','Przy bardzo lekkich hantelkach działa dopiero na wysokich powtórzeniach albo z pauzami — dodatek, nie główne ćwiczenie barków.','Bez bujania tułowiem.'],
+  prog:'Pauza 2 s w poziomie; tempo 3 s w dół.',
+  anim:{ d:2.2, props:['ground',['db',[80,74],[56,44]],['db',[104,74],[124,44]]], head:[[100,32],[100,32]],
+    lines:[ [[100,74,100,44],[100,74,100,44]], [[100,74,90,104],[100,74,90,104]], [[100,74,110,104],[100,74,110,104]], [[100,50,88,74],[100,50,68,48]], [[100,50,112,74],[100,50,132,48]] ] } },
+
+reardelt:{ n:'Odwrotne rozpiętki w opadzie', c:'pull', eq:'lekkie hantelki', dose:'3 serie · 20–25',
+  cues:['Tułów w opadzie jak do RDL, plecy proste.','Proste ręce unosisz bokiem, łopatki schodzą się na górze.','Tylny akton barku — lekkie hantelki wystarczą, ale tylko na wysokich powtórzeniach.'],
+  prog:'Pauza 1 s na górze; tempo 3 s w dół.',
+  anim:{ d:2.2, props:['ground',['db',[104,84],[134,60]]], head:[[147,44],[147,44]],
+    lines:[ [[96,103,100,72],[96,103,100,72]], [[100,72,136,50],[100,72,136,50]], [[120,58,116,86],[120,58,144,64]] ] } },
+
+towelrow:{ n:'Wiosłowanie z ręcznikiem (framuga)', c:'pull', eq:'masa ciała + ręcznik', dose:'3 serie · 8–12',
+  cues:['Ręcznik zaczepiony o klamki zamkniętych drzwi albo pewny chwyt za framugę.','Odchylasz się na prostych rękach, ciało sztywne, i ciągniesz klatkę do dłoni.','Im bardziej odchylony, tym ciężej. Sprawdź wytrzymałość zaczepu, zanim się odchylisz.'],
+  prog:'Stopy bliżej drzwi = większe odchylenie = ciężej.',
+  anim:{ d:2.4, props:['ground',['wall']], head:[[122,58],[104,44]],
+    lines:[ [[58,103,112,66],[58,103,94,52]], [[112,66,80,58],[94,52,58,55]], [[36,54,80,58],[36,54,58,55]] ] } },
+
+jumpsquat:{ n:'Przysiad z wyskokiem', c:'legs', eq:'masa ciała', dose:'3 serie · 6–10',
+  cues:['Schodzisz do przysiadu i dynamicznie wyskakujesz w górę.','Lądowanie miękko, na ugięte kolana.','Moc i tętno — nie rób na wykończonych nogach.'],
+  prog:'Wyskok z pauzy 2 s na dole.',
+  anim:{ d:1.4, props:['ground'], head:[[98,42],[98,16]],
+    lines:[ [[96,52,92,78],[98,26,100,58]], [[92,78,116,82],[100,58,102,78]], [[116,82,114,103],[102,78,100,94]], [[96,58,80,68],[98,34,108,18]] ] } },
+
+stepup:{ n:'Wejścia na krzesło (step-up)', c:'legs', eq:'masa ciała + krzesło', dose:'3 serie · 8–10 / nogę',
+  cues:['Cała stopa na siedzisku; wchodzisz siłą przedniej nogi, bez odbicia z tylnej.','Schodzisz powoli, z kontrolą.','Krzesło stabilne, najlepiej przy ścianie.'],
+  prog:'Z hantlą przy klatce; wyższe podwyższenie.',
+  anim:{ d:2.6, props:['ground',['chair']], head:[[96,30],[138,8]],
+    lines:[ [[98,72,96,42],[140,42,138,16]], [[98,72,102,88],[140,42,120,58]], [[102,88,100,104],[120,58,122,76]], [[98,72,126,76],[140,42,146,52]], [[126,76,144,66],[146,52,148,66]] ] } },
+
+sidebend:{ n:'Skłony boczne z hantlą', c:'core', eq:'hantla', dose:'3 serie · 12–15 / stronę',
+  cues:['Stojąc, hantla w jednej ręce; pochylasz się w bok czysto w płaszczyźnie ciała.','Bez pochylania w przód i bez rotacji.','Mięśnie skośne — wzmacnia, tłuszczu z boku nie spala.'],
+  prog:'Wolne tempo; docelowo cięższa hantla.',
+  anim:{ d:2.4, props:['ground',['db',[104,74],[116,78]]], head:[[100,32],[114,36]],
+    lines:[ [[100,74,100,42],[100,74,112,46]], [[100,74,90,104],[100,74,90,104]], [[100,74,110,104],[100,74,110,104]], [[100,50,112,72],[110,52,122,76]] ] } },
+
+vup:{ n:'V-up', c:'core', eq:'mata', dose:'3 serie · 8–12',
+  cues:['Z leżenia unosisz jednocześnie proste nogi i tułów; dłonie sięgają w stronę stóp.','Składasz się w literę V, powrót z kontrolą, bez opadania ciężarem.','Trudna wersja — wejdź w nią po opanowaniu hollow body.'],
+  prog:'Pauza w V; wolniejszy powrót.',
+  anim:{ d:2.6, props:['ground'], head:[[138,95],[124,56]],
+    lines:[ [[70,99,126,99],[74,96,114,62]], [[70,99,30,96],[74,96,44,58]], [[126,99,160,96],[114,62,76,52]] ] } },
 };
 
 /* ============================== DOMYŚLNY PLAN ============================== */
@@ -394,12 +554,15 @@ function animTag(attr, a, b, d){
 }
 function propSVG(p, A){
   if(p === 'ground') return `<line x1="10" y1="105" x2="190" y2="105" stroke="#b9b4a8" stroke-width="3"/>`;
-  if(p === 'bar')    return `<line x1="30" y1="16" x2="170" y2="16" stroke="#1b1d20" stroke-width="5" stroke-linecap="round"/>`;
-  if(p[0] === 'box') return `<rect x="${p[1]}" y="${p[2]}" width="${p[3]}" height="${p[4]}" fill="none" stroke="#1b1d20" stroke-width="3"/>`;
-  if(p[0] === 'chair') return `<rect x="140" y="66" width="44" height="8" fill="#1b1d20"/><line x1="146" y1="74" x2="146" y2="104" stroke="#1b1d20" stroke-width="4"/><line x1="178" y1="74" x2="178" y2="104" stroke="#1b1d20" stroke-width="4"/>`;
+  if(p === 'bar')    return `<line x1="30" y1="16" x2="170" y2="16" class="pk" stroke-width="5" stroke-linecap="round"/>`;
+  if(p[0] === 'box') return `<rect x="${p[1]}" y="${p[2]}" width="${p[3]}" height="${p[4]}" fill="none" class="pk" stroke-width="3"/>`;
+  if(p[0] === 'chair') return `<rect x="140" y="66" width="44" height="8" class="pf"/><line x1="146" y1="74" x2="146" y2="104" class="pk" stroke-width="4"/><line x1="178" y1="74" x2="178" y2="104" class="pk" stroke-width="4"/>`;
+  if(p[0] === 'chairL') return `<rect x="20" y="64" width="44" height="8" class="pf"/><line x1="26" y1="72" x2="26" y2="104" class="pk" stroke-width="4"/><line x1="58" y1="72" x2="58" y2="104" class="pk" stroke-width="4"/>`;
+  if(p[0] === 'table') return `<rect x="40" y="46" width="130" height="6" class="pf"/><line x1="50" y1="52" x2="50" y2="104" class="pk" stroke-width="4"/><line x1="160" y1="52" x2="160" y2="104" class="pk" stroke-width="4"/>`;
+  if(p[0] === 'wall') return `<line x1="32" y1="14" x2="32" y2="105" class="pk" stroke-width="4"/>`;
   if(p[0] === 'db'){
     const [a,b] = [p[1], p[2]], d = A.d;
-    return `<rect x="${a[0]}" y="${a[1]}" width="24" height="9" rx="3" fill="#1b1d20">${animTag('x',a[0],b[0],d)}${animTag('y',a[1],b[1],d)}</rect>`;
+    return `<rect x="${a[0]}" y="${a[1]}" width="24" height="9" rx="3" class="pf">${animTag('x',a[0],b[0],d)}${animTag('y',a[1],b[1],d)}</rect>`;
   }
   return '';
 }
@@ -507,6 +670,18 @@ function moveItem(d, i, dir){
   [arr[i], arr[j]] = [arr[j], arr[i]]; savePlan(); render();
 }
 function delItem(d, i){ plan.days[d].items.splice(i,1); savePlan(); render(); }
+function togglePair(d, i){
+  const it = plan.days[d].items[i];
+  it.pair = !it.pair; savePlan(); render();
+}
+/* motyw */
+function applyTheme(){
+  const p = load('wt_theme','auto');
+  const dark = p === 'dark' || (p === 'auto' && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+}
+function setTheme(v){ save('wt_theme', v); applyTheme(); render(); }
+try{ matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme); }catch(e){}
 function swapItem(d, i){
   const cat = DB[plan.days[d].items[i].ex]?.c;
   openPicker(cat, id => { plan.days[d].items[i] = { ex:id, dose: DB[id].dose }; savePlan(); });
@@ -563,6 +738,48 @@ function doImport(){
 }
 
 /* ============================== WIDOKI ============================== */
+function muscleBar(id){
+  const m = MLOAD[id]; if(!m) return '';
+  const parts = Object.entries(m).sort((a,b) => b[1]-a[1]);
+  const bar = parts.map(([k,v]) => `<i style="width:${v}%;background:${MUSC[k].c}"></i>`).join('');
+  const cap = parts.filter(p => p[1] >= 10).map(([k,v]) => `${MUSC[k].l} ${v}`).join(' · ');
+  return `<div class="mbar">${bar}</div><div class="mcap">${cap} <span style="opacity:.7">(szac. %)</span></div>`;
+}
+function renderItems(d, workout){
+  const items = plan.days[d].items;
+  const groups = [];
+  let i = 0;
+  while(i < items.length){
+    const g = [i];
+    while(items[g[g.length-1]].pair && g[g.length-1] + 1 < items.length) g.push(g[g.length-1] + 1);
+    groups.push(g); i = g[g.length-1] + 1;
+  }
+  return groups.map(g => {
+    const cards = g.map(ix => exCard(items[ix], d, ix, workout)).join('');
+    if(g.length === 1) return cards;
+    return `<div class="ssgroup"><div class="sslabel">Superset ×${g.length} — naprzemiennie, przerwa po pełnej rundzie</div>${cards}</div>`;
+  }).join('');
+}
+function dayBalance(day){
+  if(!day.items.length) return '';
+  const agg = {};
+  for(const it of day.items){
+    const m = MLOAD[it.ex]; if(!m) continue;
+    for(const k in m) agg[k] = (agg[k]||0) + m[k];
+  }
+  const tot = Object.values(agg).reduce((a,b) => a+b, 0);
+  if(!tot) return '';
+  const parts = Object.entries(agg).map(([k,v]) => [k, Math.round(v/tot*100)]).sort((a,b) => b[1]-a[1]);
+  const bar = parts.map(([k,v]) => `<i style="width:${v}%;background:${MUSC[k].c}"></i>`).join('');
+  const cap = parts.filter(p => p[1] >= 3).map(([k,v]) => `${MUSC[k].l} ${v}%`).join(' · ');
+  const missing = Object.keys(MUSC).filter(k => !agg[k] && k !== 'ra');
+  let warn = '';
+  if(parts[0][1] >= 50) warn = `<div class="mcap" style="color:var(--push)">Ponad połowa obciążenia w jednej grupie — OK, jeśli to celowy akcent dnia.</div>`;
+  return `<div class="card" style="padding:12px 14px">
+    <div class="setlbl" style="margin-bottom:4px">Rozkład obciążenia dnia — szacunkowo</div>
+    <div class="mbar big">${bar}</div><div class="mcap">${cap}</div>${warn}</div>`;
+}
+
 function exCard(it, d, i, workout){
   const e = DB[it.ex];
   if(!e) return `<div class="card">Nieznane ćwiczenie (${esc(it.ex)}) <button class="btn small" onclick="delItem(${d},${i})">Usuń</button></div>`;
@@ -582,6 +799,7 @@ function exCard(it, d, i, workout){
       <button class="btn small ghost" onclick="moveItem(${d},${i},-1)">↑</button>
       <button class="btn small ghost" onclick="moveItem(${d},${i},1)">↓</button>
       <button class="btn small" onclick="swapItem(${d},${i})">Zamień</button>
+      ${i < plan.days[d].items.length - 1 ? `<button class="btn small ${it.pair ? '' : 'ghost'}" onclick="togglePair(${d},${i})">${it.pair ? 'Rozłącz' : 'Superset'}</button>` : ''}
       <button class="btn small ghost" onclick="delItem(${d},${i})">Usuń</button>
     </div>`;
   }
@@ -591,9 +809,11 @@ function exCard(it, d, i, workout){
       <div class="exbody">
         <div class="exname">${e.n}<span class="tag" style="background:${cat.s};color:${cat.c}">${cat.label}</span></div>
         <div class="dose">${esc(it.dose)}</div>
+        ${muscleBar(it.ex)}
         ${lastHtml}
         <ul class="cues">${e.cues.map(c=>`<li>${c}</li>`).join('')}</ul>
         <div class="prog"><b>Progresja:</b> ${e.prog}</div>
+        <a class="yt" href="https://www.youtube.com/results?search_query=${encodeURIComponent(e.n + ' technika wykonania')}" target="_blank" rel="noopener">▶ Zobacz technikę (YouTube)</a>
       </div>
     </div>
     ${setsHtml}${editHtml}
@@ -636,7 +856,8 @@ function vDay(){
       <button class="btn ${state.edit?'':'ghost'}" onclick="state.edit=!state.edit;render()">${state.edit?'Gotowe':'Edytuj'}</button>
       ${state.edit ? `<button class="btn ghost" onclick="delDay(${d})">Usuń dzień</button>` : ''}
     </div>
-    ${day.items.map((it,i) => exCard(it, d, i, false)).join('')}
+    ${dayBalance(day)}
+    ${renderItems(d, false)}
     ${state.edit ? `<button class="btn" style="width:100%" onclick="addItem(${d})">+ Dodaj ćwiczenie</button>` : ''}`;
 }
 
@@ -655,7 +876,7 @@ function vWorkout(){
       <button class="btn small" onclick="startTimer(180)">3:00</button>
     </div>
     <div class="note">Wpisuj powtórzenia po każdej serii (przy czasówkach wpisz sekundy). Puste pola są pomijane.</div>
-    ${day.items.map((it,i) => exCard(it, d, i, true)).join('')}
+    ${renderItems(d, true)}
     <div class="btnrow">
       <button class="btn primary" style="flex:1" onclick="finishSession()">Zakończ i zapisz</button>
       <button class="btn ghost" onclick="cancelSession()">Porzuć</button>
@@ -674,9 +895,11 @@ function vDb(){
         <div class="exbody">
           <div class="exname">${e.n}<span class="tag" style="background:${cat.s};color:${cat.c}">${cat.label}</span></div>
           <div class="dose">${e.eq} · ${e.dose}</div>
+          ${muscleBar(id)}
           ${last ? `<div class="last">Ostatnio: <b>${last.sets.map(esc).join(' / ')}</b></div>` : ''}
           <ul class="cues">${e.cues.map(c=>`<li>${c}</li>`).join('')}</ul>
           <div class="prog"><b>Progresja:</b> ${e.prog}</div>
+          <a class="yt" href="https://www.youtube.com/results?search_query=${encodeURIComponent(e.n + ' technika wykonania')}" target="_blank" rel="noopener">▶ Zobacz technikę (YouTube)</a>
         </div></div></div>`;
     }).join('');
   return `<div class="kicker">${Object.keys(DB).length} ćwiczeń · schematy poglądowe</div>
@@ -710,24 +933,29 @@ function ioBlock(){
 function vHelp(){
   return `<div class="kicker">Jak tego używać</div><h1 class="disp">Info</h1>
   <div style="height:10px"></div>
+  <div class="card"><div class="exname">Motyw</div>
+    <div class="chips" style="margin-top:8px">
+      ${['auto','light','dark'].map(t => `<button class="chip ${load('wt_theme','auto')===t?'on':''}" onclick="setTheme('${t}')">${t==='auto'?'Auto (systemowy)':t==='light'?'Jasny':'Ciemny'}</button>`).join('')}
+    </div></div>
   <div class="card"><div class="exname">Rozgrzewka — zawsze, 5–6 min</div>
     <ul class="cues" style="margin-top:6px">
       <li>Pajacyki 60 s, krążenia ramion przód/tył.</li>
-      <li>Hantelki 1,5 kg: unoszenia bokiem ×15, w przód ×15, krążenia prostych rąk ×10 — to ich jedyna sensowna rola.</li>
+      <li>Jeśli masz lekkie hantelki (1–2 kg): unoszenia bokiem ×15, w przód ×15, krążenia prostych rąk ×10.</li>
       <li>Krążenia bioder, 10 powolnych przysiadów, 8 pompek na kolanach.</li>
     </ul></div>
   <div class="card"><div class="exname">Zasady</div>
     <ul class="cues" style="margin-top:6px">
       <li>Zapas 2–3 powtórzeń w każdej serii. Trening kończysz zmęczony, nie zniszczony.</li>
-      <li>Minimum dzień przerwy między treningami siłowymi. Basen i piłka w dni wolne.</li>
+      <li>Minimum dzień przerwy między treningami siłowymi. Cardio (basen, bieganie, rower, sporty zespołowe) w dni wolne.</li>
       <li>Białko ok. 1,6–2 g / kg masy ciała dziennie.</li>
       <li>Progresja: trudniejszy wariant, wolniejsze tempo, pauzy — kiedy górna granica powtórzeń przychodzi łatwo. Historia i „ostatnio" są od tego, żebyś to widział.</li>
-      <li>Boczki i brzuch odsłania deficyt kaloryczny, nie ćwiczenia brzucha. Spalanie punktowe nie istnieje.</li>
+      <li>Rzeźbę brzucha i talii odsłania deficyt kaloryczny, nie same ćwiczenia brzucha. Spalanie punktowe nie istnieje.</li>
+      <li>Procenty obciążenia przy ćwiczeniach i rozkład dnia to szacunki do balansowania planu — realny rozkład zależy od techniki i budowy ciała. Używaj ich do wykrywania dziur (np. dzień bez pleców), nie jako dokładnej nauki.</li>
     </ul></div>
   <div class="card"><div class="exname">Jak zrobić z tego „aplikację"</div>
     <ul class="cues" style="margin-top:6px">
       <li>Wrzuć ten plik na hosting (np. GitHub Pages) i otwórz adres w Safari.</li>
-      <li>Udostępnij → „Dodaj do ekranu początkowego" — dostaniesz ikonę i pełny ekran.</li>
+      <li>Udostępnij → „Dodaj do ekranu początkowego" — apka dostaje własną ikonę, pełny ekran i działa offline.</li>
       <li>Otwierany lokalnie też działa, ale tylko bezpośrednio w Safari; podgląd w aplikacji Pliki nie uruchamia zapisu danych.</li>
       <li>Dane (plan + historia) żyją w pamięci przeglądarki dla danego adresu — rób eksport w zakładce Historia.</li>
     </ul></div>
@@ -746,7 +974,9 @@ function render(){
   const w = document.getElementById('warn');
   if(w && !storageOK) w.style.display = 'block';
 }
+applyTheme();
 render();
+if('serviceWorker' in navigator){ try{ navigator.serviceWorker.register('sw.js'); }catch(e){} }
 </script>
 </body>
 </html>
