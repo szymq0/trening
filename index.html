@@ -826,7 +826,7 @@ function renderPicker(){
     <div class="sheethead"><h2 class="disp">Wybierz ćwiczenie</h2><button class="btn small ghost" onclick="closeModal()">Zamknij</button></div>
     <div class="chips">${chips}</div>${items}`;
 }
-function pickEx(id){ if(pickCB) pickCB(id); closeModal(); render(); 
+function pickEx(id){ if(pickCB) pickCB(id); closeModal(); render(); }
 
 /* presety */
 function presetMiniBar(ids){
@@ -1196,8 +1196,25 @@ function render(){
   const w = document.getElementById('warn');
   if(w && !storageOK) w.style.display = 'block';
 }
-applyTheme();
-render();
+function showFatal(msg, where){
+  try{
+    document.getElementById('app').innerHTML =
+      `<div class="card" style="border-color:#d64541">
+        <div class="exname" style="color:#d64541">Coś się wysypało</div>
+        <p style="font-size:13.5px;margin-top:6px">Aplikacja nie mogła się narysować (${where}). Komunikat:</p>
+        <p style="font-size:12.5px;font-family:ui-monospace,monospace;margin-top:6px;word-break:break-word">${String(msg).replace(/</g,'&lt;')}</p>
+        <div class="btnrow">
+          <button class="btn small" onclick="location.reload()">Odśwież</button>
+          <button class="btn small ghost" onclick="if(confirm('Skasować zapisany plan i historię? Tego nie da się cofnąć.')){try{localStorage.removeItem('wt_plan');localStorage.removeItem('wt_hist');}catch(e){} location.reload();}">Reset danych</button>
+        </div>
+      </div>`;
+  }catch(e){}
+}
+window.addEventListener('error', ev => showFatal(ev.message + ' @ ' + (ev.lineno||'?'), 'błąd skryptu'));
+
+try{ applyTheme(); }catch(e){}
+try{ render(); }
+catch(e){ showFatal(e && e.message ? e.message : e, 'render'); }
 if('serviceWorker' in navigator){ try{ navigator.serviceWorker.register('sw.js'); }catch(e){} }
 </script>
 </body>
