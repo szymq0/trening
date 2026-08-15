@@ -700,6 +700,10 @@ const PRESETS = [
     items:['pullup','pushup_decline','goblet','dips','row','pushup_diamond','bulgarian','chinup','archer','climbers','hollow','vup'] },
   { name:'Kalistenika + taśmy', desc:'Bez obciążeń. Akcent na barki, klatkę, bicki, plecy i brzuch. 45–60 min.',
     items:['chinup','pushup_decline','band_ohp','band_row','dips','band_curl','band_latraise','band_squat','band_facepull','revcrunch','hollow'] },
+  { name:'Bez drążka — klatka i góra', desc:'Zero sprzętu poza taśmami. Klatka w czterech wariantach, ciąganie z taśmy zamiast drążka. 45–55 min.',
+    items:['pushup_decline','band_row','pushup','band_facepull','dips','band_ohp','pushup_diamond','band_curl','squat_bw','revcrunch','hollow'] },
+  { name:'Baza pod skille', desc:'Poziom startowy, sama masa ciała. Klatka w trzech wariantach + to, czego brakuje do front levera, handstandu i pistola. Rób 2× w tygodniu.',
+    items:['activehang','pushup','scap','pushup_decline','negatives','pushup_diamond','pike','boxpistol','hollow','plank'] },
   { name:'Kalistenika — skille', desc:'Front lever, handstand, L-sit, pistol, dragon flag. Skille na świeżo, siła po nich. Progresje na miesiące, nie na tydzień.',
     items:['wallhs','explosivepull','tuckfl','skincat','lsit','pistol','dragonflag','archer'] },
 ];
@@ -822,7 +826,7 @@ function renderPicker(){
     <div class="sheethead"><h2 class="disp">Wybierz ćwiczenie</h2><button class="btn small ghost" onclick="closeModal()">Zamknij</button></div>
     <div class="chips">${chips}</div>${items}`;
 }
-function pickEx(id){ if(pickCB) pickCB(id); closeModal(); render(); }
+function pickEx(id){ if(pickCB) pickCB(id); closeModal(); render(); 
 
 /* presety */
 function presetMiniBar(ids){
