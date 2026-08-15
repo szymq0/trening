@@ -233,6 +233,10 @@ const MLOAD = {
   band_extrot:{ba:85,ra:15}, band_assist_pullup:{pl:60,ra:25,br:15},
   band_squat:{no:80,br:15,pl:5}, band_monster:{no:85,br:15},
   band_rdl:{no:60,pl:30,br:10}, band_pallof:{br:80,ba:10,pl:10},
+  band_curl:{ra:90,ba:10}, band_pushdown:{ra:90,ba:10},
+  wallhs:{ba:60,ra:25,br:15}, explosivepull:{pl:55,ra:25,br:20},
+  tuckfl:{pl:55,br:35,ra:10}, skincat:{ba:45,pl:35,br:20},
+  lsit:{br:70,ra:20,ba:10}, dragonflag:{br:85,pl:15}, pistol:{no:80,br:20},
 };
 
 /* ============================== BAZA ĆWICZEŃ ==============================
@@ -594,6 +598,61 @@ band_pallof:{ n:'Pallof press (anty-rotacja)', c:'core', eq:'taśma + zaczep', d
   prog:'Pauza 3 s w wyproście; klęk zamiast stania.',
   anim:{ d:2.6, props:['ground',['anchor',28,56],['band',[28,56,98,58],[28,56,140,54]]], head:[[110,28],[110,28]],
     lines:[ [[110,40,110,78],[110,40,110,78]], [[110,78,100,104],[110,78,100,104]], [[110,78,120,104],[110,78,120,104]], [[110,46,98,58],[110,46,140,54]] ] } },
+
+band_curl:{ n:'Uginanie ramion z taśmą', c:'pull', eq:'taśma oporowa', dose:'3 serie · 12–20',
+  cues:['Stoisz na środku taśmy, końce w dłoniach, dłonie skierowane do przodu.','Łokcie przyklejone do tułowia — ruszają się tylko przedramiona.','Opór rośnie na górze, więc dociśnij i wróć powoli. Bez zarzucania biodrami.'],
+  prog:'Szerszy rozkrok na taśmie; pauza 2 s w skurczu; tempo 3 s w dół.',
+  anim:{ d:2.4, props:['ground',['band',[96,104,104,76],[96,104,108,50]]], head:[[100,26],[100,26]],
+    lines:[ [[100,38,100,74],[100,38,100,74]], [[100,74,90,104],[100,74,90,104]], [[100,74,110,104],[100,74,110,104]], [[100,44,104,68],[100,44,104,68]], [[104,68,104,88],[104,68,110,50]] ] } },
+
+band_pushdown:{ n:'Prostowanie ramion z taśmą (pushdown)', c:'push', eq:'taśma + zaczep', dose:'3 serie · 15–20',
+  cues:['Taśma zaczepiona wysoko (drążek, framuga), łokcie przy tułowiu.','Prostujesz przedramiona w dół, łokcie się nie przesuwają.','Docisk na końcu ruchu, powrót powolny — triceps.'],
+  prog:'Pauza 2 s w wyproście; mocniejsza taśma.',
+  anim:{ d:2.2, props:['ground',['anchor',140,20],['band',[140,20,110,60],[140,20,110,86]]], head:[[100,26],[100,26]],
+    lines:[ [[100,38,100,74],[100,38,100,74]], [[100,74,90,104],[100,74,90,104]], [[100,74,110,104],[100,74,110,104]], [[100,44,106,66],[100,44,106,66]], [[106,66,110,60],[106,66,110,86]] ] } },
+
+/* ---------- KALISTENIKA — SKILLE ---------- */
+wallhs:{ n:'Stanie na rękach przy ścianie', c:'push', eq:'ściana', dose:'4 serie · 20–45 s',
+  cues:['Wchodzisz plecami do ściany (bezpieczniej) albo brzuchem — dłonie 20–30 cm od ściany.','Ciało w linii: brzuch i pośladki napięte, żebra schowane, barki wypchnięte do góry (aktywne).','Wzrok między dłonie. Jak boli nadgarstek, rozgrzej go wcześniej krążeniami i podporem.'],
+  prog:'Wydłużaj czas do 60 s, potem odsuwaj stopy od ściany i szukaj balansu.',
+  anim:{ d:2.6, props:['ground',['wall']], head:[[78,92],[78,90]],
+    lines:[ [[62,103,64,64],[62,103,66,62]], [[64,64,66,26],[66,62,68,24]], [[64,64,60,90],[66,62,60,90]] ] } },
+
+explosivepull:{ n:'Podciąganie eksplozywne (do mostka)', c:'pull', eq:'drążek', dose:'4 serie · 3–5',
+  cues:['Ciągniesz maksymalnie dynamicznie, celując drążkiem w dolną klatkę, nie w brodę.','Każde powtórzenie osobno, z pełnego zwisu — to praca nad mocą, nie nad ilością.','Krok w stronę muscle-upa. Rób tylko na świeżo, na początku treningu.'],
+  prog:'Coraz wyżej: broda → mostek → pas. Potem dorzuć chwyt „na fałszywy" i przejście.',
+  anim:{ d:2.4, props:['bar'], head:[[100,42],[100,10]],
+    lines:[ [[84,18,97,48],[86,22,96,20]], [[116,18,103,48],[114,22,104,20]], [[100,56,100,92],[100,24,100,60]], [[100,92,90,110],[100,60,90,78]], [[100,92,110,110],[100,60,112,76]] ] } },
+
+tuckfl:{ n:'Front lever w podkurczu', c:'pull', eq:'drążek', dose:'4 serie · 10–20 s',
+  cues:['Zwis, łopatki mocno ściągnięte w dół, ręce proste przez cały czas.','Wciągasz kolana do klatki i odchylasz tułów, aż plecy są równolegle do podłogi.','Biodra na wysokości barków — nie wisz w kulce pod drążkiem. Brzuch napięty jak w hollow.'],
+  prog:'Prostuj jedną nogę, potem obie (advanced tuck → straddle → full).',
+  anim:{ d:2.8, props:['bar'], head:[[126,54],[126,58]],
+    lines:[ [[96,18,102,52],[96,18,102,56]], [[112,18,106,52],[112,18,106,56]], [[104,58,66,62],[104,62,62,66]], [[66,62,56,44],[62,66,52,48]], [[56,44,74,44],[52,48,70,48]] ] } },
+
+skincat:{ n:'Skin the cat', c:'pull', eq:'drążek', dose:'3 serie · 3–5 powolnych',
+  cues:['Ze zwisu wciągasz kolana i przeprowadzasz je do tyłu między rękami, aż zawiśniesz odwrotnie.','Wracasz tą samą drogą, cały czas kontrolując tempo — zero opadania.','Świetnie otwiera barki, ale jest wymagające: pierwsze próby rób z podkurczonymi kolanami i niedaleko.'],
+  prog:'Coraz głębsze zejście, potem prostowanie nóg.',
+  anim:{ d:3.2, props:['bar'], head:[[100,44],[92,36]],
+    lines:[ [[92,18,98,50],[92,18,96,44]], [[108,18,102,50],[108,18,104,44]], [[100,56,102,86],[98,50,116,66]], [[102,86,88,98],[116,66,132,50]], [[102,86,114,98],[116,66,128,66]] ] } },
+
+lsit:{ n:'L-sit (podpór kątowy)', c:'core', eq:'podłoga / poręcze', dose:'4 serie · 10–25 s',
+  cues:['Dłonie przy biodrach, ręce proste, barki wypchnięte w dół (odpychasz się od podłogi).','Unosisz biodra i prostujesz nogi przed sobą — tułów i nogi tworzą literę L.','Jak nie odrywasz bioder, zacznij od wersji z podkurczonymi kolanami albo z rękami na książkach.'],
+  prog:'Tuck L-sit → jedna noga prosta → pełny L-sit → L-sit na poręczach.',
+  anim:{ d:2.6, props:['ground'], head:[[100,42],[100,40]],
+    lines:[ [[100,54,100,84],[100,52,100,82]], [[100,84,100,100],[100,82,100,100]], [[98,82,150,84],[98,80,152,80]] ] } },
+
+dragonflag:{ n:'Dragon flag — negatywy', c:'core', eq:'ławka / mata + zaczep', dose:'3 serie · 4–6 zejść',
+  cues:['Leżysz, chwytasz coś stabilnego za głową; unosisz całe ciało na barkach, biodra wysoko.','Opuszczasz sztywne, proste ciało jak deskę, 3–5 s, tylko barki mają kontakt z podłożem.','Lędźwie nie mogą się wyginać — jak plecy uciekają w łuk, podkurcz kolana i skróć dźwignię.'],
+  prog:'Kolana zgięte → jedna noga prosta → pełny wyprost → wersja z powrotem w górę.',
+  anim:{ d:3.0, props:['ground'], head:[[152,92],[152,92]],
+    lines:[ [[140,96,90,52],[140,96,84,84]], [[90,52,58,26],[84,84,40,74]], [[140,96,158,104],[140,96,158,104]] ] } },
+
+pistol:{ n:'Pistol squat', c:'legs', eq:'masa ciała', dose:'3 serie · 3–6 / nogę',
+  cues:['Na jednej nodze schodzisz do pełnego przysiadu, druga noga prosta przed sobą, pięta nad ziemią.','Ręce przed sobą jako przeciwwaga; pięta nogi pracującej cały czas na podłodze.','Wymaga mobilności kostki — jak pięta się odrywa, podłóż coś płaskiego pod nią.'],
+  prog:'Najpierw przysiad jednonóż do krzesła, potem coraz niższe siedzisko, na końcu bez podparcia.',
+  anim:{ d:2.8, props:['ground'], head:[[100,26],[112,42]],
+    lines:[ [[102,66,100,38],[128,64,114,54]], [[102,66,98,86],[128,64,102,84]], [[98,86,100,104],[102,84,100,104]], [[102,66,72,74],[128,64,86,66]], [[100,44,78,48],[114,56,88,60]] ] } },
 };
 
 /* ============================== DOMYŚLNY PLAN ============================== */
@@ -639,6 +698,10 @@ const PRESETS = [
     items:['band_pullapart','band_facepull','band_extrot','band_latraise','band_monster'] },
   { name:'MAN CRASH', desc:'Zajazd ogólnorozwojowy. Klatka, łapy, plecy, nogi, brzuch — 12 ćwiczeń, 60–75 min. Ciężkie na początku, brzuch na dobicie.',
     items:['pullup','pushup_decline','goblet','dips','row','pushup_diamond','bulgarian','chinup','archer','climbers','hollow','vup'] },
+  { name:'Kalistenika + taśmy', desc:'Bez obciążeń. Akcent na barki, klatkę, bicki, plecy i brzuch. 45–60 min.',
+    items:['chinup','pushup_decline','band_ohp','band_row','dips','band_curl','band_latraise','band_squat','band_facepull','revcrunch','hollow'] },
+  { name:'Kalistenika — skille', desc:'Front lever, handstand, L-sit, pistol, dragon flag. Skille na świeżo, siła po nich. Progresje na miesiące, nie na tydzień.',
+    items:['wallhs','explosivepull','tuckfl','skincat','lsit','pistol','dragonflag','archer'] },
 ];
 const DAY_COLORS = ['var(--push)','var(--pull)','var(--legs)','var(--core)','#5b4a8a','#8a4a5b'];
 const DAY_LETTERS = 'ABCDEFGH';
@@ -1077,6 +1140,14 @@ function vHelp(){
     <div class="chips" style="margin-top:8px">
       ${['auto','light','dark'].map(t => `<button class="chip ${load('wt_theme','auto')===t?'on':''}" onclick="setTheme('${t}')">${t==='auto'?'Auto (systemowy)':t==='light'?'Jasny':'Ciemny'}</button>`).join('')}
     </div></div>
+  <div class="card"><div class="exname">Skille kalisteniczne — jak je trenować</div>
+    <ul class="cues" style="margin-top:6px">
+      <li>Zawsze na początku treningu, na świeżo. Skill robiony na zmęczonych mięśniach to gorsza technika i większe ryzyko.</li>
+      <li>Nie ćwiczy się ich do upadku. Kończysz serię, gdy pozycja zaczyna się psuć — jakość przed ilością.</li>
+      <li>Przed staniem na rękach i skin the cat rozgrzej nadgarstki i barki: krążenia, podpór przodem, zwis aktywny.</li>
+      <li>Progresja idzie przez skracanie dźwigni (podkurczone kolana → jedna noga → pełny wyprost), nie przez siłowanie się z pełną wersją.</li>
+      <li>Realny horyzont to miesiące. Front lever czy pistol to nie jest cel na dwa tygodnie i to normalne.</li>
+    </ul></div>
   <div class="card"><div class="exname">Taśmy oporowe — co warto wiedzieć</div>
     <ul class="cues" style="margin-top:6px">
       <li>Opór rośnie im bardziej taśma jest rozciągnięta: najlżej na starcie, najciężej na końcu ruchu. Odwrotnie niż z hantlą.</li>
