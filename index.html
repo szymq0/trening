@@ -237,6 +237,8 @@ const MLOAD = {
   wallhs:{ba:60,ra:25,br:15}, explosivepull:{pl:55,ra:25,br:20},
   tuckfl:{pl:55,br:35,ra:10}, skincat:{ba:45,pl:35,br:20},
   lsit:{br:70,ra:20,ba:10}, dragonflag:{br:85,pl:15}, pistol:{no:80,br:20},
+  rollout:{br:80,pl:10,ba:10}, bicycle:{br:100}, hollowrock:{br:100},
+  hangknee:{br:80,pl:10,ra:10}, sideplank_rot:{br:90,ba:10}, deadbug_band:{br:85,pl:10,ba:5},
 };
 
 /* ============================== BAZA ĆWICZEŃ ==============================
@@ -653,6 +655,43 @@ pistol:{ n:'Pistol squat', c:'legs', eq:'masa ciała', dose:'3 serie · 3–6 / 
   prog:'Najpierw przysiad jednonóż do krzesła, potem coraz niższe siedzisko, na końcu bez podparcia.',
   anim:{ d:2.8, props:['ground'], head:[[100,26],[112,42]],
     lines:[ [[102,66,100,38],[128,64,114,54]], [[102,66,98,86],[128,64,102,84]], [[98,86,100,104],[102,84,100,104]], [[102,66,72,74],[128,64,86,66]], [[100,44,78,48],[114,56,88,60]] ] } },
+
+/* ---------- BRZUCH — ROZSZERZENIE ---------- */
+rollout:{ n:'Rollout z ręcznikiem (na kolanach)', c:'core', eq:'ręcznik + gładka podłoga', dose:'3 serie · 6–10',
+  cues:['Klęk, dłonie na ręczniku (albo na dwóch skarpetkach) na panelach lub kafelkach.','Wysuwasz ręce przed siebie tak daleko, jak utrzymasz płaskie plecy — lędźwie nie mogą się wyginać w łuk.','To najmocniejsze ćwiczenie anty-wyprostne bez sprzętu. Wracasz napinając brzuch, nie szarpiąc barkami.'],
+  prog:'Coraz dalszy wysuw; docelowo z pozycji stojącej albo z kółkiem.',
+  anim:{ d:3.0, props:['ground'], head:[[92,66],[52,84]],
+    lines:[ [[104,104,100,74],[104,104,100,74]], [[100,74,96,60],[100,74,86,72]], [[96,60,74,72],[86,72,38,90]] ] } },
+
+bicycle:{ n:'Rowerek (bicycle crunch)', c:'core', eq:'mata', dose:'3 serie · 12–16 / stronę',
+  cues:['Na plecach, kolana nad biodrami; przeciwny łokieć jedzie do kolana z rotacją tułowia.','Rotacja idzie z klatki, nie z szarpania szyją — dłonie tylko dotykają głowy, nie ciągną.','Wolno i z kontrolą; noga wyprostowana nisko, ale lędźwie zostają przy macie.'],
+  prog:'Wolniejsze tempo z pauzą w skręcie bije szybkie machanie.',
+  anim:{ d:2.2, props:['ground'], head:[[142,92],[142,92]],
+    lines:[ [[70,98,128,96],[70,98,128,96]], [[74,96,80,72],[74,96,44,88]], [[80,72,58,68],[44,88,26,80]], [[74,96,40,90],[74,96,84,70]], [[124,92,96,80],[124,92,90,76]] ] } },
+
+hollowrock:{ n:'Hollow rocks', c:'core', eq:'mata', dose:'3 serie · 15–25',
+  cues:['Pozycja hollow (lędźwie wciśnięte w matę), a potem bujasz całym sztywnym ciałem w przód i w tył.','Ruch idzie z barków i bioder jednocześnie — ciało zachowuje się jak jeden kawałek.','Jeśli plecy odrywają się od maty, wróć do zwykłego hollow hold.'],
+  prog:'Ręce za głowę; dłuższe serie.',
+  anim:{ d:1.6, props:['ground'], head:[[128,88],[136,80]],
+    lines:[ [[70,96,120,92],[80,92,130,94]], [[70,96,34,84],[80,92,44,88]], [[120,92,152,80],[130,94,160,86]] ] } },
+
+hangknee:{ n:'Unoszenie kolan w zwisie', c:'core', eq:'drążek', dose:'3 serie · 8–15',
+  cues:['Zwis aktywny, barki ściągnięte w dół; kolana ciągniesz do klatki z zawinięciem miednicy.','Zawinięcie robi brzuch — bez niego to tylko praca bioder.','Opuszczasz powoli, bez bujania. Przy niskim drążku ta wersja odpada, użyj reverse crunch.'],
+  prog:'Proste nogi do poziomu, docelowo palce do drążka (toes-to-bar).',
+  anim:{ d:2.6, props:['bar'], head:[[100,46],[100,46]],
+    lines:[ [[88,18,98,52],[88,18,98,52]], [[112,18,102,52],[112,18,102,52]], [[100,60,100,90],[100,60,100,86]], [[100,90,100,110],[100,86,124,74]], [[100,110,100,110],[124,74,122,96]] ] } },
+
+sideplank_rot:{ n:'Side plank z rotacją', c:'core', eq:'mata', dose:'3 serie · 8–10 / stronę',
+  cues:['Z pozycji deski bokiem przeprowadzasz górną rękę pod tułowiem i wracasz do wyprostu w górę.','Biodra przez cały czas wysoko — nie opadają przy skręcie.','Łączy pracę skosów z rotacją, czego statyczna deska bokiem nie daje.'],
+  prog:'Pauza 1 s w skręcie i w wyproście; górna noga uniesiona.',
+  anim:{ d:2.6, props:['ground'], head:[[58,66],[58,66]],
+    lines:[ [[62,80,62,103],[62,80,62,103]], [[62,103,84,103],[62,103,84,103]], [[62,80,160,99],[62,80,160,99]], [[70,78,72,50],[70,80,96,90]] ] } },
+
+deadbug_band:{ n:'Dead bug z taśmą', c:'core', eq:'taśma + zaczep', dose:'3 serie · 8–10 / stronę',
+  cues:['Taśma zaczepiona za głową, trzymasz ją prostymi rękami nad klatką — ciągnie Cię w wyprost.','Prostujesz przeciwną nogę, cały czas nie pozwalając lędźwiom oderwać się od maty.','Napięcie taśmy zmusza brzuch do dużo cięższej pracy niż zwykły dead bug.'],
+  prog:'Mocniejsza taśma; wolniejszy wyprost nogi.',
+  anim:{ d:3.0, props:['ground',['anchor',176,86],['band',[118,60,176,86],[118,60,176,86]]], head:[[134,95],[134,95]],
+    lines:[ [[66,99,122,99],[66,99,122,99]], [[118,97,118,60],[118,97,118,60]], [[70,99,74,72],[70,99,52,86]], [[74,72,54,74],[52,86,32,90]] ] } },
 };
 
 /* ============================== DOMYŚLNY PLAN ============================== */
@@ -700,6 +739,8 @@ const PRESETS = [
     items:['pullup','pushup_decline','goblet','dips','row','pushup_diamond','bulgarian','chinup','archer','climbers','hollow','vup'] },
   { name:'Kalistenika + taśmy', desc:'Bez obciążeń. Akcent na barki, klatkę, bicki, plecy i brzuch. 45–60 min.',
     items:['chinup','pushup_decline','band_ohp','band_row','dips','band_curl','band_latraise','band_squat','band_facepull','revcrunch','hollow'] },
+  { name:'Brzuch — komplet', desc:'Wszystkie trzy funkcje brzucha: anty-wyprost, anty-rotacja, zginanie. 20–25 min, sama mata.',
+    items:['rollout','hangknee','band_pallof','revcrunch','bicycle','sideplank_rot','hollowrock'] },
   { name:'Bez drążka — klatka i góra', desc:'Zero sprzętu poza taśmami. Klatka w czterech wariantach, ciąganie z taśmy zamiast drążka. 45–55 min.',
     items:['pushup_decline','band_row','pushup','band_facepull','dips','band_ohp','pushup_diamond','band_curl','squat_bw','revcrunch','hollow'] },
   { name:'Baza pod skille', desc:'Poziom startowy, sama masa ciała. Klatka w trzech wariantach + to, czego brakuje do front levera, handstandu i pistola. Rób 2× w tygodniu.',
