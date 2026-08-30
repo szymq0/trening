@@ -145,6 +145,10 @@
   .ssgroup .card{margin-bottom:8px}
   .sslabel{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:0 6px 6px}
   .mbar{display:flex;height:6px;border-radius:3px;overflow:hidden;margin-top:7px;background:var(--line)}
+  .mrow{display:flex;gap:10px;align-items:center;margin-top:8px}
+  .mrow-b{flex:1;min-width:0}
+  .mrow .mbar{margin-top:0}
+  .bmap{width:96px;flex:none;height:auto}
   .mbar i{display:block;height:100%}
   .mbar.big{height:13px;border-radius:6px}
   .mcap{font-size:11.5px;color:var(--muted);margin-top:3px}
@@ -239,6 +243,11 @@ const MLOAD = {
   lsit:{br:70,ra:20,ba:10}, dragonflag:{br:85,pl:15}, pistol:{no:80,br:20},
   rollout:{br:80,pl:10,ba:10}, bicycle:{br:100}, hollowrock:{br:100},
   hangknee:{br:80,pl:10,ra:10}, sideplank_rot:{br:90,ba:10}, deadbug_band:{br:85,pl:10,ba:5},
+  pushup_wide:{kl:65,ba:15,ra:10,br:10}, pseudoplanche:{ba:40,kl:35,ra:15,br:10},
+  clappushup:{kl:50,ra:25,ba:15,br:10}, band_fly:{kl:85,ba:15},
+  dips_elev:{ra:45,kl:35,ba:20}, pike_elev:{ba:65,ra:25,br:10},
+  band_frontraise:{ba:85,ra:15}, band_yraise:{ba:55,pl:40,ra:5},
+  band_hammer:{ra:90,ba:10}, band_tricep_ext:{ra:90,ba:10},
 };
 
 /* ============================== BAZA ĆWICZEŃ ==============================
@@ -692,6 +701,67 @@ deadbug_band:{ n:'Dead bug z taśmą', c:'core', eq:'taśma + zaczep', dose:'3 s
   prog:'Mocniejsza taśma; wolniejszy wyprost nogi.',
   anim:{ d:3.0, props:['ground',['anchor',176,86],['band',[118,60,176,86],[118,60,176,86]]], head:[[134,95],[134,95]],
     lines:[ [[66,99,122,99],[66,99,122,99]], [[118,97,118,60],[118,97,118,60]], [[70,99,74,72],[70,99,52,86]], [[74,72,54,74],[52,86,32,90]] ] } },
+
+/* ---------- KLATKA, BARKI, RĘCE — ROZSZERZENIE ---------- */
+pushup_wide:{ n:'Pompki szerokie', c:'push', eq:'masa ciała', dose:'3 serie · 10–15',
+  cues:['Dłonie wyraźnie szerzej niż barki, łokcie idą bardziej na boki.','Większe rozciągnięcie klatki, mniej pracy tricepsa niż w klasycznych.','Nie schodź niżej niż komfortowo dla barków — szeroki chwyt je obciąża.'],
+  prog:'Wolniejsze tempo i pauza 1 s na dole; potem nogi na podwyższeniu.',
+  anim:{ d:2.2, props:['ground'], head:[[153,64],[153,80]],
+    lines:[ [[38,92,138,72],[38,98,138,88]], [[138,72,146,103],[138,88,152,103]], [[38,92,22,103],[38,98,22,104]] ] } },
+
+pseudoplanche:{ n:'Pompki pseudo planche', c:'push', eq:'masa ciała', dose:'3 serie · 6–10',
+  cues:['Dłonie na wysokości pasa, palce skierowane w bok lub w tył, barki wychylone przed dłonie.','Im dalej barki przed dłońmi, tym ciężej — mocno pracuje przód barku i klatka.','Ciało sztywne w linii; nadgarstki wcześniej rozgrzej.'],
+  prog:'Coraz mocniejsze wychylenie barków do przodu.',
+  anim:{ d:2.4, props:['ground'], head:[[160,60],[160,74]],
+    lines:[ [[42,94,146,68],[42,98,146,84]], [[146,68,130,103],[146,84,128,103]], [[42,94,26,103],[42,98,26,104]] ] } },
+
+clappushup:{ n:'Pompki z klaśnięciem', c:'push', eq:'masa ciała', dose:'4 serie · 3–6',
+  cues:['Dynamiczne odepchnięcie tak mocne, żeby dłonie oderwały się od podłogi.','Lądowanie miękkie, na ugięte łokcie — nie na sztywne ręce.','Praca nad mocą, nie nad ilością. Wchodź w nie, gdy klasyczne robisz 15+.'],
+  prog:'Najpierw same odbicia bez klaśnięcia, potem klaśnięcie.',
+  anim:{ d:1.4, props:['ground'], head:[[153,72],[153,50]],
+    lines:[ [[40,98,140,86],[40,88,140,60]], [[140,86,140,103],[140,60,136,84]], [[40,98,24,104],[40,88,24,96]] ] } },
+
+band_fly:{ n:'Rozpiętki z taśmą', c:'push', eq:'taśma oporowa', dose:'3 serie · 15–20',
+  cues:['Taśma za plecami, ręce niemal proste, rozłożone na boki na wysokości klatki.','Zwodzisz dłonie przed sobą łukiem, jakbyś obejmował beczkę — łokcie zostają lekko ugięte.','Izolacja klatki: to jedyne ćwiczenie w bazie, które trafia w nią bez udziału tricepsa.'],
+  prog:'Pauza 2 s w zwarciu; mocniejsza taśma.',
+  anim:{ d:2.4, props:['ground',['band',[62,58,138,58],[92,54,110,54]]], head:[[100,26],[100,26]],
+    lines:[ [[100,38,100,78],[100,38,100,78]], [[100,78,90,104],[100,78,90,104]], [[100,78,110,104],[100,78,110,104]], [[100,46,62,58],[100,46,92,54]], [[100,46,138,58],[100,46,110,54]] ] } },
+
+dips_elev:{ n:'Dipy z nogami na podwyższeniu', c:'push', eq:'dwa krzesła', dose:'3 serie · 6–10',
+  cues:['Dłonie na krawędzi jednego krzesła, pięty na drugim — cały ciężar wisi na rękach.','Łokcie idą prosto w tył, zejście do ok. 90°, barki z dala od uszu.','Wyraźnie cięższa wersja dipów; wchodź, gdy zwykłe robisz 12+.'],
+  prog:'Obciążenie na udach (plecak) albo pauza 2 s na dole.',
+  anim:{ d:2.4, props:['ground',['chairL'],['box',150,72,36,32]], head:[[66,30],[66,46]],
+    lines:[ [[64,44,60,66],[64,60,60,66]], [[64,44,88,80],[64,60,90,88]], [[88,80,150,74],[90,88,150,74]] ] } },
+
+pike_elev:{ n:'Pompki pike z nogami na podwyższeniu', c:'push', eq:'masa ciała + krzesło', dose:'3 serie · 5–10',
+  cues:['Stopy na krześle, biodra wysoko nad barkami — sylwetka bliska pionowej.','Głowa schodzi między dłonie, łokcie do tyłu, nie na boki.','Najbliższy masie ciała odpowiednik wyciskania nad głowę; krok przed staniem na rękach.'],
+  prog:'Wyższe podparcie; docelowo stanie na rękach przy ścianie.',
+  anim:{ d:2.4, props:['ground',['box',150,68,36,36]], head:[[70,58],[64,80]],
+    lines:[ [[72,103,86,56],[72,103,80,74]], [[86,56,110,36],[80,74,110,40]], [[110,36,150,70],[110,40,150,70]] ] } },
+
+band_frontraise:{ n:'Unoszenia w przód z taśmą', c:'push', eq:'taśma oporowa', dose:'3 serie · 15–20',
+  cues:['Stoisz na taśmie, końce w dłoniach przy udach, dłonie skierowane do tyłu.','Unosisz proste ręce przed siebie do wysokości barków, nie wyżej.','Bez bujania tułowiem — jeśli musisz zarzucać biodrami, taśma jest za mocna.'],
+  prog:'Pauza 2 s w górze; wolniejsze opuszczanie.',
+  anim:{ d:2.4, props:['ground',['band',[96,104,104,76],[96,104,132,52]]], head:[[100,26],[100,26]],
+    lines:[ [[100,38,100,78],[100,38,100,78]], [[100,78,90,104],[100,78,90,104]], [[100,78,110,104],[100,78,110,104]], [[100,44,104,76],[100,44,132,52]] ] } },
+
+band_yraise:{ n:'Unoszenie w Y z taśmą', c:'pull', eq:'taśma oporowa', dose:'3 serie · 15–20',
+  cues:['Taśma napięta przed sobą; unosisz proste ręce skośnie w górę, tworząc literę Y.','Kciuki skierowane do góry, łopatki schodzą w dół i do tyłu.','Trafia w dolny czworoboczny — mięsień, który przy siedzącej pracy praktycznie nie pracuje.'],
+  prog:'Pauza 2 s na górze; mocniejsza taśma.',
+  anim:{ d:2.4, props:['ground',['band',[80,54,120,54],[62,26,138,26]]], head:[[100,26],[100,30]],
+    lines:[ [[100,38,100,78],[100,40,100,78]], [[100,78,90,104],[100,78,90,104]], [[100,78,110,104],[100,78,110,104]], [[100,44,80,54],[100,46,62,26]], [[100,44,120,54],[100,46,138,26]] ] } },
+
+band_hammer:{ n:'Uginanie młotkowe z taśmą', c:'pull', eq:'taśma oporowa', dose:'3 serie · 15–20',
+  cues:['Jak zwykłe uginanie, ale dłonie ustawione neutralnie (kciuki do góry).','Łokcie przyklejone do tułowia; ruszają się wyłącznie przedramiona.','Uderza w ramienno-promieniowy i boczną część bicepsa — dokłada grubości ramieniu.'],
+  prog:'Pauza 2 s w skurczu; tempo 3 s w dół.',
+  anim:{ d:2.4, props:['ground',['band',[96,104,108,74],[96,104,112,48]]], head:[[100,26],[100,26]],
+    lines:[ [[100,38,100,74],[100,38,100,74]], [[100,74,90,104],[100,74,90,104]], [[100,74,110,104],[100,74,110,104]], [[100,44,106,68],[100,44,106,68]], [[106,68,108,86],[106,68,112,48]] ] } },
+
+band_tricep_ext:{ n:'Wyciskanie francuskie z taśmą', c:'push', eq:'taśma oporowa', dose:'3 serie · 15–20',
+  cues:['Taśma pod stopą lub za plecami, dłonie za głową, łokcie skierowane w górę.','Prostujesz przedramiona nad głową — łokcie zostają w miejscu, blisko uszu.','Trafia w długą głowę tricepsa, której dipy i pompki nie obciążają w pełnym rozciągnięciu.'],
+  prog:'Pauza 1 s w wyproście; mocniejsza taśma.',
+  anim:{ d:2.4, props:['ground',['band',[104,104,96,50],[104,104,100,14]]], head:[[100,32],[100,32]],
+    lines:[ [[100,44,100,78],[100,44,100,78]], [[100,78,90,104],[100,78,90,104]], [[100,78,110,104],[100,78,110,104]], [[100,48,104,22],[100,48,104,22]], [[104,22,96,50],[104,22,100,14]] ] } },
 };
 
 /* ============================== DOMYŚLNY PLAN ============================== */
@@ -985,12 +1055,42 @@ function doImport(){
 }
 
 /* ============================== WIDOKI ============================== */
+/* Mapa ciała: sylwetka od przodu i od tyłu, segmenty podświetlone wg obciążenia */
+function bodyMap(load){
+  const m = load || {};
+  const max = Math.max(1, ...Object.values(m));
+  const paint = k => {
+    const v = m[k] || 0;
+    if(!v) return `fill="var(--line)" opacity="0.55"`;
+    const op = (0.3 + 0.7 * (v / max)).toFixed(2);
+    return `fill="${MUSC[k].c}" opacity="${op}"`;
+  };
+  // figura: przód (x≈34) i tył (x≈106)
+  const fig = (cx, back) => `
+    <circle cx="${cx}" cy="12" r="7" fill="var(--line)" opacity="0.55"/>
+    <rect x="${cx-14}" y="21" width="9" height="8" rx="3" ${paint('ba')}/>
+    <rect x="${cx+5}"  y="21" width="9" height="8" rx="3" ${paint('ba')}/>
+    ${back
+      ? `<rect x="${cx-10}" y="22" width="20" height="24" rx="4" ${paint('pl')}/>
+         <rect x="${cx-9}"  y="47" width="18" height="13" rx="4" ${paint('pl')}/>`
+      : `<rect x="${cx-10}" y="22" width="20" height="16" rx="4" ${paint('kl')}/>
+         <rect x="${cx-9}"  y="39" width="18" height="21" rx="4" ${paint('br')}/>`}
+    <rect x="${cx-19}" y="29" width="7" height="27" rx="3" ${paint('ra')}/>
+    <rect x="${cx+12}" y="29" width="7" height="27" rx="3" ${paint('ra')}/>
+    <rect x="${cx-9}"  y="61" width="8"  height="31" rx="3" ${paint('no')}/>
+    <rect x="${cx+1}"  y="61" width="8"  height="31" rx="3" ${paint('no')}/>`;
+  return `<svg viewBox="0 0 140 100" class="bmap" aria-label="Mapa obciążanych partii">
+    ${fig(34, false)}${fig(106, true)}
+    <text x="34" y="99" text-anchor="middle" font-size="8" fill="var(--muted)">przód</text>
+    <text x="106" y="99" text-anchor="middle" font-size="8" fill="var(--muted)">tył</text>
+  </svg>`;
+}
 function muscleBar(id){
   const m = MLOAD[id]; if(!m) return '';
   const parts = Object.entries(m).sort((a,b) => b[1]-a[1]);
   const bar = parts.map(([k,v]) => `<i style="width:${v}%;background:${MUSC[k].c}"></i>`).join('');
   const cap = parts.filter(p => p[1] >= 10).map(([k,v]) => `${MUSC[k].l} ${v}`).join(' · ');
-  return `<div class="mbar">${bar}</div><div class="mcap">${cap} <span style="opacity:.7">(szac. %)</span></div>`;
+  return `<div class="mrow">${bodyMap(m)}<div class="mrow-b"><div class="mbar">${bar}</div><div class="mcap">${cap} <span style="opacity:.7">(szac. %)</span></div></div></div>`;
 }
 function renderItems(d, workout){
   const items = plan.days[d].items;
@@ -1024,7 +1124,7 @@ function dayBalance(day){
   if(parts[0][1] >= 50) warn = `<div class="mcap" style="color:var(--push)">Ponad połowa obciążenia w jednej grupie — OK, jeśli to celowy akcent dnia.</div>`;
   return `<div class="card" style="padding:12px 14px">
     <div class="setlbl" style="margin-bottom:4px">Rozkład obciążenia dnia — szacunkowo</div>
-    <div class="mbar big">${bar}</div><div class="mcap">${cap}</div>${warn}</div>`;
+    <div class="mrow">${bodyMap(Object.fromEntries(parts))}<div class="mrow-b"><div class="mbar big">${bar}</div><div class="mcap">${cap}</div>${warn}</div></div></div>`;
 }
 
 function exCard(it, d, i, workout){
